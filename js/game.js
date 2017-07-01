@@ -72,6 +72,8 @@ function Game(config) {
 
 	    // Private methods and variables
 
+	    function handleEvent() {}
+
 	    function updateBalance() {}
 
 	    function updateBet() {}
