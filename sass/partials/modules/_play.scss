@@ -1,0 +1,46 @@
+.card {
+	display: inline-block;
+	width: 218px;
+	height: 327px;
+	background: url('../img/deck2.png') no-repeat;
+}
+
+.cardHidden {
+	background-image: url('../img/back.png');
+	background-position: 0 0 !important;
+}
+
+.cardsContainer {
+
+	position: relative;
+
+	span {
+		position: absolute;
+		top: 0;
+	}
+
+	span:first-child {
+		z-index: 6;
+		position: relative;
+	}
+
+	span:nth-child(2) {
+		z-index: 5;
+		left: 50px;
+	}
+
+	span:nth-child(3) {
+		z-index: 4;
+		left: 100px;
+	}
+
+	span:nth-child(4) {
+		z-index: 3;
+		left: 150px;
+	}
+
+	span:nth-child(5) {
+		z-index: 2;
+		left: 200px;
+	}
+}

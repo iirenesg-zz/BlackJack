@@ -1,0 +1,23 @@
+.chip {
+	display: inline-block;
+	width: 149px;
+	height: 149px;
+	background: url('../img/chips.png') no-repeat;
+	cursor: pointer;
+}
+
+.chip1 {
+	background-position: -2px -2px;
+}
+
+.chip5 {
+	background-position: -156px -3px;
+}
+
+.chip25 {
+	background-position: -310px -2px;
+}
+
+.chip100 {
+	background-position: -464px -2px;
+}

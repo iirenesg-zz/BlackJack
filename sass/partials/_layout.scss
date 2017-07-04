@@ -1,0 +1,108 @@
+.footer {
+	position: fixed;
+	bottom: 0;
+}
+
+.chipContainer {
+	height: 100px;
+	display: inline-block;
+	position: relative;
+	transform: translateX(-50%);
+	left: 50%;
+	top: 50px;
+}
+
+.balanceContainer {
+	height: 125px;
+	border-top: 10px solid $dark;
+
+	div {
+		display: inline-block;
+		position: relative;
+		transform: translate(-50%, -50%);
+		top: 60%;
+		left: 50%;
+	}
+
+	p {	
+		font-size: 28px;
+	}
+
+	button {
+		font-size: 30px;
+		margin: 0 250px;
+	}
+}
+
+.betContainer {
+	p {
+		position: relative;
+		transform: translateX(-50%);
+		left: 50%;
+		top: 40px;
+	}
+
+	p:before {
+	    content: "";
+	    display: block;
+	    width: 0; 
+	    height: 0; 
+	    border-right: 10px solid transparent;
+	    border-top: 10px solid rgba(0, 0, 0, .3);
+	    border-left: 10px solid transparent;
+	    position: absolute;
+	    bottom: -10px;
+	    transform: translateX(-50%);
+	    left: 50%;
+	}
+}
+
+.msgContainer {
+	position: fixed;
+	top: 0;
+
+	p {
+		position: relative;
+		text-align: center;
+		transform: translateX(-50%);
+		left: 50%;
+		top: 20px;
+		display: inline-block;
+	}
+}
+
+.playContainer {
+	width: 50%;
+	float: left;
+
+	&>div {
+		display: inline-block;
+		position: relative;
+		transform: translateX(-50%);
+		left: 50%;
+		top: 100px;
+	}
+
+	p {
+		font-size: 30px;
+		display: inline-block;
+		transform: translateY(-50%);
+		position: absolute;
+		top: 50%;
+		left: -100px;
+	}
+
+	p:before {
+	    content: "";
+	    display: block;
+	    width: 0; 
+	    height: 0; 
+	    border-top: 10px solid transparent;
+	    border-left: 10px solid rgba(0, 0, 0, .3);
+	    border-bottom: 10px solid transparent;
+	    position: absolute;
+	    transform: translateY(-50%);
+	    top: 50%;
+	    right: -10px;
+	}
+}

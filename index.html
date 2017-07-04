@@ -3,10 +3,59 @@
 	<head>
 		<title>BlackJack</title>
 		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/style.css">
+		<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,400i,700|Lilita+One" rel="stylesheet">
 	</head>
 	<body>
 
-		<script src="js/buildblocks.js"></script>
+		<button id="dealBtn" class="bigBtn hidden">Deal</button>
+		<button id="continueBtn" class="bigBtn hidden">Continue</button>
+
+		<section class="msgContainer">
+			<p id="msgDisplay" class="infoBox">Mensajes aquí</p>
+		</section>
+
+		<section id="playDisplay" class="hidden">
+			<section class="playContainer">
+				<div>
+					<p class="infoBox"><span id="userCountDisplay">21</span></p>
+					<div id="userCardsDisplay" class="cardsContainer">
+						<span id="userCardFront" class="card"></span>
+						<span id="userCardBack" class="card"></span>
+					</div>
+				</div>
+			</section>
+
+			<section class="playContainer">
+				<div>				
+					<p class="infoBox"><span id="dealerCountDisplay">21</span></p>
+					<div id="dealerCardsDisplay" class="cardsContainer">
+						<span id="dealerCardFront" class="card"></span>
+						<span id="dealerCardBack" class="card cardHidden"></span>
+					</div>
+				</div>
+			</section>
+		</section>
+
+		<section class="footer">
+			<div class="betContainer">
+				<p class="infoBox">Bet: $<span id="betDisplay">0</span><span id="resetBetBtn" class="infoBox xBtn">x</span></p>
+			</div>
+			<div class="chipContainer">
+				<span id="chip1" class="chip chip1"></span>
+				<span id="chip5" class="chip chip5"></span>
+				<span id="chip25" class="chip chip25"></span>
+				<span id="chip100" class="chip chip100"></span>
+			</div>
+			<div class="balanceContainer">
+				<div>
+					<button class="hidden" id="hitBtn">Hit</button>
+					<p class="infoBox">Balance: $<span id="balanceDisplay">1000</span></p>
+					<button class="hidden" id="standBtn">Stand</button>
+				</div>
+			</div>
+		</section>
+
 		<script src="js/dealer.js"></script>
 		<script src="js/game.js"></script>
 		<script src="js/main.js"></script>
