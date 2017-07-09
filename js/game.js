@@ -1,38 +1,39 @@
-function Game(config) {
+var Game = function () {
 
-	var self = this;
+	function init(config) {
+		var gameData = new GameModel(config);
+		var UI = new GameView(config);
+		var gameHandler = new GameController(gameData, UI);
 
-	self.init = function() {
-		self.gameState = self.gameModel.getInstance();
+		gameHandler.init();
 	}
 
-	var GameModel = function() {
+	function GameModel(config) {
 
 		var State = (function() {
 			var instance;
 
-	  		function init() {
+	  		function init(config) {
 	    
 			    // Private methods and variables
-
-			    var deck = [];
-			    var balance;
-			    var currentPlay;
-			    var currentBet;
 			    
 			    return {
 			 
-			    // Public methods and variables
+			    	dealer: config.dealer,
+			    	deck: new cardFactory(),
+				    balance: 1000,
+				    currentPlay: null,
+				    currentBet: 0
 			 
 			    };
 			}
 
 			return {
  
-	    		getInstance: function () {
+	    		getInstance: function (config) {
 	 
 	      			if ( !instance ) {
-	        			instance = init();
+	        			instance = init(config);
 	      			}
 
 	     			return instance;
@@ -41,58 +42,48 @@ function Game(config) {
 
 		})();
 
-		var observers = [];
-		function subscribe(topic, fn) {}
-		function unsubscribe(fn) {}
-		function publish(topic) {}
+		this.state = State.getInstance(config);
+		this.observers = [];
+		this.subscribe = function(topic, fn) {}
+		this.unsubscribe = function(fn) {}
+		this.publish = function(topic) {}
  	}
 
-	self.gameView = function() {
+	function GameView(config) {
 
-		// Private methods and variables
+		this.dealBtn;
+		this.hitBtn;
+		this.standBtn;
+		this.doubleBtn;
+		this.divideBtn;
 
-		var dealBtn;
-		var hitBtn;
-		var standBtn;
-		var doubleBtn;
-		var divideBtn;
+		this.balanceDisplay;
+		this.betDisplay;
+		this.playDisplay;
+		this.msgDisplay;
 
-		var balanceDisplay;
-		var betDisplay;
-		var playDisplay;
-		var msgDisplay;
-
-		function renderBet() {}
-		function renderBalance() {}
-		function renderPlay() {}
-		function renderMsg() {}
-
-		return {
-
-		// Public methods and variables
-		
-		}
+		this.renderBet = function() {}
+		this.renderBalance = function() {}
+		this.renderPlay = function() {}
+		this.renderMsg = function() {}
 
 	}
 
-	self.gameController = function(model, view) {
+	function GameController(model, view) {
 
-	    // Private methods and variables
+	    this.init = function() {
+	    	this.addEvents();
+	    	this.addSubscriptions();
+	    }
 
-	    var events = {};
+	    this.addSubscriptions = function() {}
 
-	    function handleEvent() {}
+	    this.addEvents = function() {}
 
-	    function updateBet() {}
+	}
 
-	    function updatePlay() {}
-
-		return {
-
-		// Public methods and variables
-
-		}
-
+	return {
+		init: init
 	}
 
 }

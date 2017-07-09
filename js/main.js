@@ -23,7 +23,7 @@ var config = {
 	dealer: new Dealer()
 }
 
-var game = new Game(config);
+var game = Game(config);
 
 (function init() {
 	game.init();

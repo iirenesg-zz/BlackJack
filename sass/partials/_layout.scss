@@ -14,7 +14,9 @@
 
 .balanceContainer {
 	height: 125px;
-	border-top: 10px solid $dark;
+	border-top: 5px solid $light;
+	background-image: url("../img/fttexture.jpg");
+	background-size: cover;
 
 	div {
 		display: inline-block;
