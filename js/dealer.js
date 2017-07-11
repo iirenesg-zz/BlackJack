@@ -2,9 +2,9 @@ function Dealer() {
 
 	var self = this;
 
-	self.commands = [];
-
-	self.execute = function(name) {};
+	self.execute = function (name) {
+	    return self[name] && self[name].apply(self, [].slice.call(arguments, 1) );
+	};
 
 	self.deal = function() {};
 

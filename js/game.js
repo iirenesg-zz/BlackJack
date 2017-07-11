@@ -43,10 +43,31 @@ var Game = function () {
 		})();
 
 		this.state = State.getInstance(config);
-		this.observers = [];
-		this.subscribe = function(topic, fn) {}
-		this.unsubscribe = function(fn) {}
-		this.publish = function(topic) {}
+		this.observers = {
+			start: [],
+			money: [],
+			userPlay: [],
+			dealerPlay: [],
+			end: []
+		};
+
+		this.subscribe = function(topic, fn) {
+			observers[topic].push(fn);
+		}
+
+		this.unsubscribe = function(topic, fn) {
+			observers[topic] = observers[topic].filter(function(observer) {
+				if(observer != fn) {
+					return observer;
+				}
+			});
+		}
+
+		this.publish = function(topic, data) {
+			observers[topic].forEach(function(observer){
+				observer(data);
+			})
+		}
  	}
 
 	function GameView(config) {
