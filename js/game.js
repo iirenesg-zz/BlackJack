@@ -1,8 +1,8 @@
 var Game = function () {
 
 	function init(config) {
-		var gameData = new GameModel(config);
-		var UI = new GameView(config);
+		var gameData = new GameModel(config.model);
+		var UI = new GameView(config.view);
 		var gameHandler = new GameController(gameData, UI);
 
 		gameHandler.init();
@@ -19,9 +19,9 @@ var Game = function () {
 			    
 			    return {
 			 
-			    	dealer: config.dealer,
-			    	deck: new cardFactory(),
-				    balance: 1000,
+			    	dealer: new Dealer(),
+			    	deck: new Deck(),
+				    balance: config.balance,
 				    currentPlay: null,
 				    currentBet: 0
 			 
@@ -87,6 +87,8 @@ var Game = function () {
 		this.renderBalance = function() {}
 		this.renderPlay = function() {}
 		this.renderMsg = function() {}
+		this.renderCounters = function() {}
+		this.renderCard = function() {}
 
 	}
 

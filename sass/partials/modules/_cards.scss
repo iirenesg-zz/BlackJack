@@ -1,0 +1,79 @@
+.card {
+	display: inline-block;
+	width: 218px;
+	height: 327px;
+	background: url('../img/deck2.png') no-repeat;
+}
+
+.cardHidden {
+	background-image: url('../img/back.png');
+	background-position: 0 0 !important;
+}
+
+.club {
+	background-position-y: -702px;
+}
+
+.spade {
+	background-position-y: -1041px;
+}
+
+.diamond {
+	background-position-y: -363px;
+}
+
+.heart {
+	background-position-y: -23px;
+}
+
+.cardA {
+	background-position-x: -25px;
+}
+
+.card2 {
+	background-position-x: -258px;
+}
+
+.card3 {
+	background-position-x: -490px;
+}
+
+.card4 {
+	background-position-x: -723px;
+}
+
+.card5 {
+	background-position-x: -956px;
+}
+
+.card6 {
+	background-position-x: -1188px;
+}
+
+.card7 {
+	background-position-x: -1421px;
+}
+
+.card8 {
+	background-position-x: -1654px;
+}
+
+.card9 {
+	background-position-x: -1886px;
+}
+
+.card10 {
+	background-position-x: -2119px;
+}
+
+.cardJ {
+	background-position-x: -2352px;
+}
+
+.cardQ {
+	background-position-x: -2584px;
+}
+
+.cardK {
+	background-position-x: -2817px;
+}

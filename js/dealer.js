@@ -20,7 +20,7 @@ function Dealer() {
 
 } 
 
-function cardFactory() {
+function Deck() {
 
 	var deck = [];
 
