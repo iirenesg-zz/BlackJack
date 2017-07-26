@@ -43,6 +43,7 @@ var Game = function () {
 		})();
 
 		this.state = State.getInstance(config);
+
 		this.observers = {
 			start: [],
 			money: [],
@@ -74,22 +75,22 @@ var Game = function () {
 				observer(data);
 			})
 		}
-		this.LightBlueChip1 = function(){
+		this.LightBlueChip1 = function(model){
 			model.state.currentBet = currentBet + 1;
 			model.state.balance -= 1;
 			model.publish('money');
 		}
-		this.RedChip5 = function(){
+		this.RedChip5 = function(model){
 			model.state.currentBet = currentBet + 5;
 			model.state.balance -= 5;
 			model.publish('money');
 		}
-		this.GreenChip25 = function() {
+		this.GreenChip25 = function(model) {
 			model.state.currentBet = currentBet + 25;
 			model.state.balance -= 25;
 			model.publish('money');
 		}
-		this.BlackChip100 = function() {
+		this.BlackChip100 = function(model) {
 			model.state.currentBet = currentBet + 100;
 			model.state.balance -= 100;
 			model.publish('money');
@@ -142,7 +143,7 @@ var Game = function () {
 
 	    /**
 	     * @type {subscription} 
-	     * param model in the function GameController subscribe 
+	     * param of model in the function GameController subscribe 
 	    **/
 	    this.addSubscriptions = function() {
 	    	model.subscribe('money', view.renderBet);
