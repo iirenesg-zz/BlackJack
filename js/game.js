@@ -68,6 +68,32 @@ var Game = function () {
 				observer(data);
 			})
 		}
+
+		this.publish = function(topic, data) {
+			observers[topic].forEach(function(observer){
+				observer(data);
+			})
+		}
+		this.LightBlueChip1 = function(){
+			model.state.currentBet = currentBet + 1;
+			model.state.balance -= 1;
+			model.publish('money');
+		}
+		this.RedChip5 = function(){
+			model.state.currentBet = currentBet + 5;
+			model.state.balance -= 5;
+			model.publish('money');
+		}
+		this.GreenChip25 = function() {
+			model.state.currentBet = currentBet + 25;
+			model.state.balance -= 25;
+			model.publish('money');
+		}
+		this.BlackChip100 = function() {
+			model.state.currentBet = currentBet + 100;
+			model.state.balance -= 100;
+			model.publish('money');
+		}
  	}
 
 	function GameView(config) {
@@ -83,14 +109,29 @@ var Game = function () {
 		this.playDisplay;
 		this.msgDisplay;
 
-		this.renderBet = function() {}
-		this.renderBalance = function() {}
+		this.chip1;
+		this.chip5;
+		this.chip25;
+		this.chip100;
+
+		/**
+		 * [renderBet, renderBalance]
+		 * @return {string} 
+		 * modify in html the total money in balance and bet of player
+		**/
+		this.renderBet = function() {
+			betDisplay.innerHTML = state.currentBet;
+		}
+		this.renderBalance = function() {
+			balanceDisplay.innerHTML = state.balance;
+		}
 		this.renderPlay = function() {}
 		this.renderMsg = function() {}
 		this.renderCounters = function() {}
 		this.renderCard = function() {}
 
 	}
+
 
 	function GameController(model, view) {
 
@@ -99,9 +140,25 @@ var Game = function () {
 	    	this.addSubscriptions();
 	    }
 
-	    this.addSubscriptions = function() {}
+	    /**
+	     * @type {subscription} 
+	     * param model in the function GameController subscribe 
+	    **/
+	    this.addSubscriptions = function() {
+	    	model.subscribe('money', view.renderBet);
+	    	model.subscribe('money', view.renderBalance);
+	    }
 
-	    this.addEvents = function() {}
+	    /**
+	     * @type {clickEvent} 
+	     * this.addEvents have all events of click in the game
+	    **/
+	    this.addEvents = function() {
+	    	chip1.addEventListener('click', model.LightBlueChip1);
+	    	chip5.addEventListener('click', model.RedChip5);
+	    	chip25.addEventListener('click', model.GreenChip25);
+	    	chip100.addEventListener('click', model.BlackChip100);
+	    }
 
 	}
 

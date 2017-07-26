@@ -1,0 +1,245 @@
+* {
+  margin: 0;
+  padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%; }
+
+body {
+  font: 21px "Josefin Sans", sans-serif;
+  background-image: url("../img/bgtexture.jpg");
+  background-size: cover; }
+
+button {
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  border-right: 5px solid #198A1B;
+  border-bottom: 5px solid #198A1B;
+  font: 21px "Josefin Sans", sans-serif;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: #2FFF32;
+  transition: all .3s; }
+
+button:hover {
+  background-color: #198A1B;
+  color: #fff; }
+
+section {
+  width: 100%; }
+
+.infoBox {
+  color: #fff;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 10px 15px;
+  border-radius: 15px; }
+
+.xBtn {
+  padding: 0 10px 3px 10px;
+  border-radius: 5px;
+  margin-left: 15px;
+  cursor: pointer; }
+
+.bigBtn {
+  font-size: 48px;
+  padding: 10px 20px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 35%;
+  left: 50%; }
+
+.cardsContainer {
+  position: relative; }
+  .cardsContainer span {
+    position: absolute;
+    top: 0; }
+  .cardsContainer span:first-child {
+    z-index: 6;
+    position: relative; }
+  .cardsContainer span:nth-child(2) {
+    z-index: 5;
+    left: 50px; }
+  .cardsContainer span:nth-child(3) {
+    z-index: 4;
+    left: 100px; }
+  .cardsContainer span:nth-child(4) {
+    z-index: 3;
+    left: 150px; }
+  .cardsContainer span:nth-child(5) {
+    z-index: 2;
+    left: 200px; }
+
+.card {
+  display: inline-block;
+  width: 218px;
+  height: 327px;
+  background: url("../img/deck2.png") no-repeat; }
+
+.cardHidden {
+  background-image: url("../img/back.png");
+  background-position: 0 0 !important; }
+
+.club {
+  background-position-y: -702px; }
+
+.spade {
+  background-position-y: -1041px; }
+
+.diamond {
+  background-position-y: -363px; }
+
+.heart {
+  background-position-y: -23px; }
+
+.cardA {
+  background-position-x: -25px; }
+
+.card2 {
+  background-position-x: -258px; }
+
+.card3 {
+  background-position-x: -490px; }
+
+.card4 {
+  background-position-x: -723px; }
+
+.card5 {
+  background-position-x: -956px; }
+
+.card6 {
+  background-position-x: -1188px; }
+
+.card7 {
+  background-position-x: -1421px; }
+
+.card8 {
+  background-position-x: -1654px; }
+
+.card9 {
+  background-position-x: -1886px; }
+
+.card10 {
+  background-position-x: -2119px; }
+
+.cardJ {
+  background-position-x: -2352px; }
+
+.cardQ {
+  background-position-x: -2584px; }
+
+.cardK {
+  background-position-x: -2817px; }
+
+.chip {
+  display: inline-block;
+  width: 149px;
+  height: 149px;
+  background: url("../img/chips.png") no-repeat;
+  cursor: pointer; }
+
+.chip1 {
+  background-position: -2px -2px; }
+
+.chip5 {
+  background-position: -156px -3px; }
+
+.chip25 {
+  background-position: -310px -2px; }
+
+.chip100 {
+  background-position: -464px -2px; }
+
+.footer {
+  position: fixed;
+  bottom: 0; }
+
+.chipContainer {
+  height: 100px;
+  display: inline-block;
+  position: relative;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 50px; }
+
+.balanceContainer {
+  height: 125px;
+  border-top: 5px solid #6E532F;
+  background-image: url("../img/fttexture.jpg");
+  background-size: cover; }
+  .balanceContainer div {
+    display: inline-block;
+    position: relative;
+    transform: translate(-50%, -50%);
+    top: 60%;
+    left: 50%; }
+  .balanceContainer p {
+    font-size: 28px; }
+  .balanceContainer button {
+    font-size: 30px;
+    margin: 0 250px; }
+
+.betContainer p {
+  position: relative;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 40px; }
+.betContainer p:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-right: 10px solid transparent;
+  border-top: 10px solid rgba(0, 0, 0, 0.3);
+  border-left: 10px solid transparent;
+  position: absolute;
+  bottom: -10px;
+  transform: translateX(-50%);
+  left: 50%; }
+
+.msgContainer {
+  position: fixed;
+  top: 0; }
+  .msgContainer p {
+    position: relative;
+    text-align: center;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 20px;
+    display: inline-block; }
+
+.playContainer {
+  width: 50%;
+  float: left; }
+  .playContainer > div {
+    display: inline-block;
+    position: relative;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 100px; }
+  .playContainer p {
+    font-size: 30px;
+    display: inline-block;
+    transform: translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: -100px; }
+  .playContainer p:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-left: 10px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 10px solid transparent;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    right: -10px; }
+
+.hidden {
+  display: none; }
+
+/*# sourceMappingURL=style.css.map */

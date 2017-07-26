@@ -30,8 +30,8 @@ var config = {
 
 }
 
-var game = Game(config);
+var game = Game();
 
 (function init() {
-	game.init();
+	game.init(config);
 })();
