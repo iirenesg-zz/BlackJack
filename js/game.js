@@ -53,11 +53,11 @@ var Game = function () {
 		};
 
 		this.subscribe = function(topic, fn) {
-			observers[topic].push(fn);
+			this.observers[topic].push(fn);
 		}
 
 		this.unsubscribe = function(topic, fn) {
-			observers[topic] = observers[topic].filter(function(observer) {
+			this.observers[topic] =  observers[topic].filter(function(observer) {
 				if(observer != fn) {
 					return observer;
 				}
@@ -65,15 +65,15 @@ var Game = function () {
 		}
 
 		this.publish = function(topic, data) {
-			observers[topic].forEach(function(observer){
+			this.observers[topic].forEach(function(observer){
 				observer(data);
-			})
+			});
 		}
 
 		this.publish = function(topic, data) {
-			observers[topic].forEach(function(observer){
+			this.observers[topic].forEach(function(observer){
 				observer(data);
-			})
+			});
 		}
 		this.LightBlueChip1 = function(model){
 			model.state.currentBet = currentBet + 1;
@@ -143,7 +143,7 @@ var Game = function () {
 
 	    /**
 	     * @type {subscription} 
-	     * param of model in the function GameController subscribe 
+	     * param of model in the function GameController subscribe the view.renderBet and renderBalance
 	    **/
 	    this.addSubscriptions = function() {
 	    	model.subscribe('money', view.renderBet);
