@@ -13,7 +13,6 @@ var Game = function () {
 		/**
 		 * Singleton pattern 
 		 * Returns a unique instance of the game data
-		 * 
 		 * @class      State (name)
 		 * @return     {Object}  Game model data 
 		 */
@@ -59,7 +58,6 @@ var Game = function () {
 
 		/**
 		 * Subscribes a function to a specific topic notification
-		 *
 		 * @param      {string}    topic   The topic to subscribe to
 		 * @param      {Function}  fn      Function to subscribe
 		 */
@@ -69,7 +67,6 @@ var Game = function () {
 
 		/**
 		 * Unsubscribes a function from a specific topic notification
-		 *
 		 * @param      {string}    topic   The topic to unsubscribe to
 		 * @param      {Function}  fn      Function to unsubscribe
 		 */
@@ -83,7 +80,6 @@ var Game = function () {
 
 		/**
 		 * Publishes a notification to all the observers subscribed to a topic
-		 *
 		 * @param      {string}  topic   The topic notification where changes happened
 		 * @param      {object}  data    The data to send as parameters to the subscribed functions
 		 */
@@ -95,7 +91,6 @@ var Game = function () {
 
 		/**
 		 * Updates the value of the bet and balance variables of the game state
-		 *
 		 * @param      {number}  amt     The amount the user bet
 		 */
 		this.updateBet = function(amt) {
@@ -116,16 +111,19 @@ var Game = function () {
 		this.balanceDisplay = config.balanceDisplay;
 		this.betDisplay = config.betDisplay;
 		this.playDisplay;
-		this.msgDisplay;
+		this.msgDisplay = msgDisplay;
 
 		this.chip1 = config.chip1;
 		this.chip5 = config.chip5;
 		this.chip25 = config.chip25;
 		this.chip100 = config.chip100;
 
+		this.messages = {
+			start: 'Place a bet to start playing'
+		}
+
 		/**
 		 * Renders current bet value in the DOM 
-		 * 
 		 * @param      {Object}  state   Current state of the model data
 		 */
 		this.renderBet = function(state) {
@@ -140,8 +138,15 @@ var Game = function () {
 			balanceDisplay.innerHTML = state.balance;
 		}
 
+		/**
+		 * Renders a message in the DOM
+		 * @param      {string}  topic   The topic of the message to be displayed
+		 */
+		this.renderMsg = function(topic) {
+			msgDisplay.innerText = this.messages[topic];
+		}
+
 		this.renderPlay = function() {}
-		this.renderMsg = function() {}
 		this.renderCounters = function() {}
 		this.renderCard = function() {}
 
@@ -156,6 +161,7 @@ var Game = function () {
 	    this.init = function() {
 	    	this.addEvents();
 	    	this.addSubscriptions();
+	    	view.renderMsg('start');
 	    }
 
 		/**
