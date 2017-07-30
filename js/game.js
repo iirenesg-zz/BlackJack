@@ -10,12 +10,17 @@ var Game = function () {
 
 	function GameModel(config) {
 
+		/**
+		 * Singleton pattern 
+		 * Returns a unique instance of the game data
+		 * 
+		 * @class      State (name)
+		 * @return     {Object}  Game model data 
+		 */
 		var State = (function() {
 			var instance;
 
 	  		function init(config) {
-	    
-			    // Private methods and variables
 			    
 			    return {
 			 
@@ -52,48 +57,51 @@ var Game = function () {
 			end: []
 		};
 
+		/**
+		 * Subscribes a function to a specific topic notification
+		 *
+		 * @param      {string}    topic   The topic to subscribe to
+		 * @param      {Function}  fn      Function to subscribe
+		 */
 		this.subscribe = function(topic, fn) {
 			this.observers[topic].push(fn);
 		}
 
+		/**
+		 * Unsubscribes a function from a specific topic notification
+		 *
+		 * @param      {string}    topic   The topic to unsubscribe to
+		 * @param      {Function}  fn      Function to unsubscribe
+		 */
 		this.unsubscribe = function(topic, fn) {
-			this.observers[topic] =  observers[topic].filter(function(observer) {
+			this.observers[topic] =  this.observers[topic].filter(function(observer) {
 				if(observer != fn) {
 					return observer;
 				}
 			});
 		}
 
+		/**
+		 * Publishes a notification to all the observers subscribed to a topic
+		 *
+		 * @param      {string}  topic   The topic notification where changes happened
+		 * @param      {object}  data    The data to send as parameters to the subscribed functions
+		 */
 		this.publish = function(topic, data) {
 			this.observers[topic].forEach(function(observer){
 				observer(data);
 			});
 		}
 
-		this.publish = function(topic, data) {
-			this.observers[topic].forEach(function(observer){
-				observer(data);
-			});
-		}
-		this.LightBlueChip1 = function(model){
-			model.state.currentBet = currentBet + 1;
-			model.state.balance -= 1;
-			model.publish('money');
-		}
-		this.RedChip5 = function(model){
-			model.state.currentBet = currentBet + 5;
-			model.state.balance -= 5;
-			model.publish('money');
-		}
-		this.GreenChip25 = function(model) {
-			model.state.currentBet = currentBet + 25;
-			model.state.balance -= 25;
-			model.publish('money');
-		}
-		this.BlackChip100 = function(model) {
-			model.state.currentBet = currentBet + 100;
-			model.state.balance -= 100;
-			model.publish('money');
+		/**
+		 * Updates the value of the bet and balance variables of the game state
+		 *
+		 * @param      {number}  amt     The amount the user bet
+		 */
+		this.updateBet = function(amt) {
+			this.state.currentBet += amt;
+			this.state.balance -= amt;
+			this.publish('money', this.state);
 		}
  	}
 
@@ -105,27 +113,33 @@ var Game = function () {
 		this.doubleBtn;
 		this.divideBtn;
 
-		this.balanceDisplay;
-		this.betDisplay;
+		this.balanceDisplay = config.balanceDisplay;
+		this.betDisplay = config.betDisplay;
 		this.playDisplay;
 		this.msgDisplay;
 
-		this.chip1;
-		this.chip5;
-		this.chip25;
-		this.chip100;
+		this.chip1 = config.chip1;
+		this.chip5 = config.chip5;
+		this.chip25 = config.chip25;
+		this.chip100 = config.chip100;
 
 		/**
-		 * [renderBet, renderBalance]
-		 * @return {string} 
-		 * modify in html the total money in balance and bet of player
-		**/
-		this.renderBet = function() {
+		 * Renders current bet value in the DOM 
+		 * 
+		 * @param      {Object}  state   Current state of the model data
+		 */
+		this.renderBet = function(state) {
 			betDisplay.innerHTML = state.currentBet;
 		}
-		this.renderBalance = function() {
+
+		/**
+		 * Renders current balance value in the DOM 
+		 * @param      {Object}  state   Current state of the model data
+		 */
+		this.renderBalance = function(state) {
 			balanceDisplay.innerHTML = state.balance;
 		}
+
 		this.renderPlay = function() {}
 		this.renderMsg = function() {}
 		this.renderCounters = function() {}
@@ -136,29 +150,30 @@ var Game = function () {
 
 	function GameController(model, view) {
 
+		/**
+		 * Initializes game controller
+		 */
 	    this.init = function() {
 	    	this.addEvents();
 	    	this.addSubscriptions();
 	    }
 
-	    /**
-	     * @type {subscription} 
-	     * param of model in the function GameController subscribe the view.renderBet and renderBalance
-	    **/
+		/**
+		 * Subscribes view functions to the model observer list 
+		 */
 	    this.addSubscriptions = function() {
 	    	model.subscribe('money', view.renderBet);
 	    	model.subscribe('money', view.renderBalance);
 	    }
 
 	    /**
-	     * @type {clickEvent} 
-	     * this.addEvents have all events of click in the game
-	    **/
+	     * Adds the event handlers to the view buttons
+	     */
 	    this.addEvents = function() {
-	    	chip1.addEventListener('click', model.LightBlueChip1);
-	    	chip5.addEventListener('click', model.RedChip5);
-	    	chip25.addEventListener('click', model.GreenChip25);
-	    	chip100.addEventListener('click', model.BlackChip100);
+	    	chip1.addEventListener('click', function(){ model.updateBet(1) });
+	    	chip5.addEventListener('click', function(){ model.updateBet(5) });
+	    	chip25.addEventListener('click', function(){ model.updateBet(25) });
+	    	chip100.addEventListener('click', function(){ model.updateBet(100) });
 	    }
 
 	}
