@@ -148,14 +148,50 @@ var Game = function () {
 
 		this.renderPlay = function() {}
 		this.renderCounters = function() {}
-		this.renderCard = function() {}
+		this.renderCard = function() {
+
+			playDisplay.classList.remove("hidden");
+
+			/*
+			 *
+			 *Asign value and kind of the card according the hand
+			 *@param value - Value of tha card (Suit/Name)
+			 *@param kindCard - Kind of the display card (Front/Back)
+			 *
+			*/
+
+			function kindCards(value, kindCard) {
+				kindCard.classList.add(value.suit);
+				kindCard.classList.add('card' + value.name);
+			}
+
+			//Deal (Card Front/Card Back) to the dealer according the suit and the name
+			for (var i = 0; i < dealerCards.length; i++) {
+				if (i === 0) {
+					//dealerCardBack.classList.add('cardHidden');
+					kindCards(dealerCards[i],dealerCardBack);
+				}else{
+					kindCards(dealerCards[i],dealerCardFront);
+				};
+			};
+
+			//Deal (Card Front/Card Back) to the player according the suit and the name
+			for (var i = 0; i < playerCards.length; i++) {
+				if (i === 0) {
+					kindCards(playerCards[i], userCardBack);
+				}else{
+					kindCards(playerCards[i], userCardFront);
+				}
+			};
+
+			dealBtn.classList.add('hidden');
+		};
 
 	}
 
-
 	function GameController(model, view) {
 
-		/**
+	    /**
 		 * Initializes game controller
 		 */
 	    this.init = function() {
@@ -175,11 +211,13 @@ var Game = function () {
 	    /**
 	     * Adds the event handlers to the view buttons
 	     */
+
 	    this.addEvents = function() {
 	    	chip1.addEventListener('click', function(){ model.updateBet(1) });
 	    	chip5.addEventListener('click', function(){ model.updateBet(5) });
 	    	chip25.addEventListener('click', function(){ model.updateBet(25) });
 	    	chip100.addEventListener('click', function(){ model.updateBet(100) });
+	    	dealBtn.addEventListener('click', view.renderCard);
 	    }
 
 	}
