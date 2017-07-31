@@ -2,6 +2,12 @@ function Dealer() {
 
 	var self = this;
 
+	/**
+	 * Executes a function from a given parameter
+	 * Command pattern
+	 * @param      {string} name    Command to be executed
+	 * @return     {function}  		Function to be executed as a result of the command given
+	 */
 	self.execute = function (name) {
 	    return self[name] && self[name].apply(self, [].slice.call(arguments, 1) );
 	};
