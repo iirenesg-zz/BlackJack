@@ -5,6 +5,11 @@ function Dealer() {
 	    return self[name] && self[name].apply(self, [].slice.call(arguments, 1) );
 	};
 	
+	/**
+	 * Deal Function, take Cards of the Deck and deal to the players hands
+	 *
+	 * @param      {Object}  state   The state of the dealerCards, playerCards and Deck
+	 */
 	self.deal = function(state) {
 
 		state.currentPlay = new Play();
@@ -46,8 +51,14 @@ function Dealer() {
 
 	self.resolve = function() {};
 
-} 
+}
 
+/**
+ * Deck Function, create deck
+ *
+ * @class      Deck (Deck)
+ * @param      {Object}  state   The state of the deck
+ */
 function Deck (state){
 
 	this.cards = [];
@@ -66,7 +77,9 @@ function Deck (state){
  	};
 }
 
-
+/**
+ * Do the deck random
+ */
 Deck.prototype = {
 	contructor : Deck,
 
@@ -90,9 +103,14 @@ Deck.prototype = {
 	
 };
 
-//var deck = new Deck();
-//deck.deckRandom();
-
+/**
+ * Valid Cards
+ *
+ * @class      Card (Card)
+ * @param      {string}  value   The value of the card
+ * @param      {string}  name    The name of the card
+ * @param      {string}  suit    The suit of the card
+ */
 function Card (value, name, suit) {
 	this.value = value;
 	this.suit = suit;

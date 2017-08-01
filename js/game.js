@@ -56,10 +56,20 @@ var Game = function () {
 			end: []
 		};
 
+		/**
+		 * Create and execute Deck Function
+		 *
+		 * @param      {Object}  state   The state of the deck
+		 */
 		this.deck = function(state) {
 			this.state.deck.deckRandom();
 		}
 
+		/**
+		 * Execute and publish Dealer Function
+		 *
+		 * @param      {Object}  state   The state of the deal
+		 */
 		this.deal = function(state) {
 			this.state.dealer.execute('deal', this.state);
 			this.publish('start', this.state);
@@ -108,6 +118,11 @@ var Game = function () {
 			this.publish('money', this.state);
 		}
 
+		/**
+		 * Update counter value of the cards - In progress
+		 *
+		 * @param      {Object}  state   The state of the counters and currentPlay
+		 */
 		this.updateCounter = function (state) {
 			var dealerCards = this.state.currentPlay.dealerCards;
 			var playerCards = this.state.currentPlay.playerCards;
@@ -174,6 +189,11 @@ var Game = function () {
 
 		}
 
+		/**
+		 * Render Cards Functions
+		 *
+		 * @param      {Object}  state   The state hands of the playerCards and dealerCards
+		 */
 		this.renderCard = function(state) {
 			
 
