@@ -5,22 +5,32 @@ function Dealer() {
 	    return self[name] && self[name].apply(self, [].slice.call(arguments, 1) );
 	};
 	
-	self.deal = function() {
-		console.log('enter')
+	self.deal = function(state) {
+
+		state.currentPlay = new Play();
+
+		var dealerCards = state.currentPlay.dealerCards;
+
+		var playerCards = state.currentPlay.playerCards;
+
+		var deck = state.deck;
+
+		console.log(dealerCards, playerCards, deck)
+
 		for (var i = 0; i < deck.cards.length; i++) {
 
 			//Push Cards to Dealer Hand and Delete from Deck
-			if (self.dealerCards.length < 2) {
+			if (dealerCards.length < 2) {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
-				self.dealerCards.push(card);
+				dealerCards.push(card);
 			};
 
 			//Push Cards to Player Hand and Delete from Deck
-			if (self.playerCards.length < 2) {
+			if (playerCards.length < 2) {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
-				self.playerCards.push(card);
+				playerCards.push(card);
 			};
 
 		};
@@ -38,7 +48,8 @@ function Dealer() {
 
 } 
 
-function Deck (){
+function Deck (state){
+
 	this.cards = [];
 	this.numCards = 0;
 
@@ -79,6 +90,9 @@ Deck.prototype = {
 	
 };
 
+//var deck = new Deck();
+//deck.deckRandom();
+
 function Card (value, name, suit) {
 	this.value = value;
 	this.suit = suit;
@@ -94,9 +108,6 @@ Card.prototype.setValue = function () {
 		return parseInt(this.name, 10);
 	}
 };
-
-var deck = new Deck();
-//deck.deckRandom();
 
 function Play() {
 	var self = this;

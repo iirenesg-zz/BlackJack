@@ -56,6 +56,15 @@ var Game = function () {
 			end: []
 		};
 
+		this.deck = function(state) {
+			this.state.deck.deckRandom();
+		}
+
+		this.deal = function(state) {
+			this.state.dealer.execute('deal', this.state);
+			this.publish('start', this.state);
+		}
+
 		/**
 		 * Subscribes a function to a specific topic notification
 		 * @param      {string}    topic   The topic to subscribe to
@@ -98,6 +107,16 @@ var Game = function () {
 			this.state.balance -= amt;
 			this.publish('money', this.state);
 		}
+
+		this.updateCounter = function (state) {
+			var dealerCards = this.state.currentPlay.dealerCards;
+			var playerCards = this.state.currentPlay.playerCards;
+			var total = 0;
+
+			for (var i = 0; i < dealerCards.length; i++) {
+				dealerCards[i].value += total
+			}
+		}
  	}
 
 	function GameView(config) {
@@ -117,6 +136,9 @@ var Game = function () {
 		this.chip5 = config.chip5;
 		this.chip25 = config.chip25;
 		this.chip100 = config.chip100;
+
+		this.userCountDisplay;
+		this.dealerCountDisplay;
 
 		this.messages = {
 			start: 'Place a bet to start playing'
@@ -147,16 +169,24 @@ var Game = function () {
 		}
 
 		this.renderPlay = function() {}
-		this.renderCounters = function() {}
-		this.renderCard = function() {
+
+		this.renderCounters = function(state) {
+
+		}
+
+		this.renderCard = function(state) {
+			
+
+			var dealerCards = state.currentPlay.dealerCards;
+			var playerCards = state.currentPlay.playerCards;
 
 			playDisplay.classList.remove("hidden");
 
 			/*
 			 *
 			 *Asign value and kind of the card according the hand
-			 *@param value - Value of tha card (Suit/Name)
-			 *@param kindCard - Kind of the display card (Front/Back)
+			 *@param 	value - Value of tha card (Suit/Name)
+			 *@param 	kindCard - Kind of the display card (Front/Back)
 			 *
 			*/
 
@@ -170,7 +200,7 @@ var Game = function () {
 				if (i === 0) {
 					//dealerCardBack.classList.add('cardHidden');
 					kindCards(dealerCards[i],dealerCardBack);
-				}else{
+				}else if (i === 1){
 					kindCards(dealerCards[i],dealerCardFront);
 				};
 			};
@@ -179,7 +209,7 @@ var Game = function () {
 			for (var i = 0; i < playerCards.length; i++) {
 				if (i === 0) {
 					kindCards(playerCards[i], userCardBack);
-				}else{
+				}else if (i === 1){
 					kindCards(playerCards[i], userCardFront);
 				}
 			};
@@ -198,6 +228,7 @@ var Game = function () {
 	    	this.addEvents();
 	    	this.addSubscriptions();
 	    	view.renderMsg('start');
+	    	model.deck();
 	    }
 
 		/**
@@ -206,6 +237,8 @@ var Game = function () {
 	    this.addSubscriptions = function() {
 	    	model.subscribe('money', view.renderBet);
 	    	model.subscribe('money', view.renderBalance);
+	    	model.subscribe('start', view.renderCard);
+	    	model.subscribe('start', view.renderCounters);
 	    }
 
 	    /**
@@ -217,7 +250,7 @@ var Game = function () {
 	    	chip5.addEventListener('click', function(){ model.updateBet(5) });
 	    	chip25.addEventListener('click', function(){ model.updateBet(25) });
 	    	chip100.addEventListener('click', function(){ model.updateBet(100) });
-	    	dealBtn.addEventListener('click', view.renderCard);
+	    	dealBtn.addEventListener('click', function(){ model.deal()});
 	    }
 
 	}
