@@ -56,6 +56,20 @@ var Game = function () {
 			end: []
 		};
 
+		this.deck = function(state) {
+			this.state.deck.deckRandom();
+		}
+
+		this.deal = function(state) {
+			this.state.dealer.execute('deal', this.state);
+			this.publish('start', this.state);
+		}
+
+		this.hit = function(state) {
+			var valid = this.state.dealer.execute('hit', this.state, 'player');
+			if(valid) this.publish('userPlay', this.state);
+		}
+
 		/**
 		 * Subscribes a function to a specific topic notification
 		 * @param      {string}    topic   The topic to subscribe to
@@ -94,9 +108,25 @@ var Game = function () {
 		 * @param      {number}  amt     The amount the user bet
 		 */
 		this.updateBet = function(amt) {
-			this.state.currentBet += amt;
-			this.state.balance -= amt;
-			this.publish('money', this.state);
+			if(amt < this.state.balance) {
+				this.state.currentBet += amt;
+				this.state.balance -= amt;
+				this.publish('money', this.state);
+				return true;				
+			} else {
+				return false;
+			}
+
+		}
+
+		this.updateCounter = function (state) {
+			var dealerCards = this.state.currentPlay.dealerCards;
+			var playerCards = this.state.currentPlay.playerCards;
+			var total = 0;
+
+			for (var i = 0; i < dealerCards.length; i++) {
+				dealerCards[i].value += total
+			}
 		}
  	}
 
@@ -118,17 +148,28 @@ var Game = function () {
 		this.chip25 = config.chip25;
 		this.chip100 = config.chip100;
 
+		this.userCountDisplay;
+		this.dealerCountDisplay;
+
 		this.messages = {
-			start: 'Place a bet to start playing'
-		}
+			start: 'Place a bet to start playing',
+			maxBet: 'You can\'t bet VALUE because you don\'t have enough money'
+		};
+
+		this.currentMsg = 'start';
 
 		/**
 		 * Renders current bet value in the DOM 
 		 * @param      {Object}  state   Current state of the model data
 		 */
 		this.renderBet = function(state) {
+			if(state.currentBet > 0) {
+				dealBtn.classList.remove('hidden');
+			} else {
+				dealBtn.classList.add('hidden');
+			}
 			betDisplay.innerHTML = state.currentBet;
-		}
+		};
 
 		/**
 		 * Renders current balance value in the DOM 
@@ -136,32 +177,90 @@ var Game = function () {
 		 */
 		this.renderBalance = function(state) {
 			balanceDisplay.innerHTML = state.balance;
-		}
+		};
 
 		/**
 		 * Renders a message in the DOM
 		 * @param      {string}  topic   The topic of the message to be displayed
 		 */
-		this.renderMsg = function(topic) {
-			msgDisplay.innerText = this.messages[topic];
-		}
+		this.renderMsg = function(topic, data) {
+			var msg = this.messages[topic].replace('VALUE', data);
+			msgDisplay.innerText = msg;
+		};
 
-		this.renderPlay = function() {}
-		this.renderCounters = function() {}
-		this.renderCard = function() {}
+		var self = this;
+
+		this.renderPlay = function(state) {
+
+			var dealerCards = state.currentPlay.dealerCards;
+			var playerCards = state.currentPlay.playerCards;
+
+			playDisplay.classList.remove("hidden");
+
+			//Deal (Card Front/Card Back) to the dealer according the suit and the name
+			for (var i = 0; i < dealerCards.length; i++) {
+				if (i === 0) {
+					dealerCardsDisplay.appendChild(self.composeCard(dealerCards[i]));
+				}else if (i === 1){
+					var card = self.composeCard(dealerCards[i]);
+					card.classList.add('cardHidden');
+					dealerCardsDisplay.appendChild(card);
+				 } 
+			}
+
+			//Deal (Card Front/Card Back) to the player according the suit and the name
+			for (var i = 0; i < playerCards.length; i++) {
+				userCardsDisplay.appendChild(self.composeCard(playerCards[i]));
+			}
+
+			dealBtn.classList.add('hidden');
+
+		};
+
+		this.renderCard = function(state, container){
+
+			var dealerCards = state.currentPlay.dealerCards;
+			var playerCards = state.currentPlay.playerCards;
+
+
+			userCardsDisplay.appendChild(self.composeCard(playerCards[playerCards.length - 1]))
+		};
+
+		this.renderCounters = function(state) {
+
+		};
+
+		/*
+		 *
+		 *Asign value and kind of the card according the hand
+		 *@param 	value - Value of tha card (Suit/Name)
+		 *@param 	kindCard - Kind of the display card (Front/Back)
+		 *
+		*/
+		self.composeCard = function(card) { //solo una carta
+			
+			var element = document.createElement('span');
+			element.classList.add('card');
+			element.classList.add(card.suit);
+			element.classList.add('card' + card.name);
+
+			return element;
+			
+		};
 
 	}
 
-
 	function GameController(model, view) {
 
-		/**
+	    /**
 		 * Initializes game controller
 		 */
 	    this.init = function() {
 	    	this.addEvents();
 	    	this.addSubscriptions();
 	    	view.renderMsg('start');
+	    	view.currentMsg = 'start';
+	    	model.deck();
 	    }
 
 		/**
@@ -170,17 +269,32 @@ var Game = function () {
 	    this.addSubscriptions = function() {
 	    	model.subscribe('money', view.renderBet);
 	    	model.subscribe('money', view.renderBalance);
+	    	model.subscribe('start', view.renderPlay);
+	    	model.subscribe('start', view.renderCounters);
+	    	model.subscribe('userPlay', view.renderCard);
 	    }
 
 	    /**
 	     * Adds the event handlers to the view buttons
 	     */
+	     var self = this;
+
 	    this.addEvents = function() {
-	    	chip1.addEventListener('click', function(){ model.updateBet(1) });
-	    	chip5.addEventListener('click', function(){ model.updateBet(5) });
-	    	chip25.addEventListener('click', function(){ model.updateBet(25) });
-	    	chip100.addEventListener('click', function(){ model.updateBet(100) });
+	    	chip1.addEventListener('click', function(){ self.validBet(1) });
+	    	chip5.addEventListener('click', function(){ self.validBet(5) });
+	    	chip25.addEventListener('click', function(){ self.validBet(25) });
+	    	chip100.addEventListener('click', function(){ self.validBet(100) });
+	    	dealBtn.addEventListener('click', function(){ model.deal()});
+	    	hitBtn.addEventListener('click', function() { model.hit()});
 	    }
+
+		self.validBet = function(amt) {
+			var valid = model.updateBet(amt);
+			if(!valid) {
+				view.renderMsg('maxBet', '$' + amt);
+				setTimeout(function(){view.renderMsg(view.currentMsg)}, 3000)
+			}
+		}
 
 	}
 
