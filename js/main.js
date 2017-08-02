@@ -5,7 +5,7 @@ var config = {
 		dealBtn: document.getElementById('dealBtn'),
 		playDisplay: document.getElementById('playDisplay'),
 		userCountDisplay: document.getElementById('userCountDisplay'),
-		delaerCountDisplay: document.getElementById('dealerCountDisplay'),
+		dealerCountDisplay: document.getElementById('dealerCountDisplay'),
 		userCardFront: document.getElementById('userCardFront'),
 		userCardBack: document.getElementById('userCardBack'),
 		dealerCardFront: document.getElementById('dealerCardFront'),
