@@ -5,11 +5,6 @@ function Dealer() {
 	    return self[name] && self[name].apply(self, [].slice.call(arguments, 1) );
 	};
 	
-	/**
-	 * Deal Function, take Cards of the Deck and deal to the players hands
-	 *
-	 * @param      {Object}  state   The state of the dealerCards, playerCards and Deck
-	 */
 	self.deal = function(state) {
 
 		state.currentPlay = new Play();
@@ -19,8 +14,6 @@ function Dealer() {
 		var playerCards = state.currentPlay.playerCards;
 
 		var deck = state.deck;
-
-		console.log(dealerCards, playerCards, deck)
 
 		for (var i = 0; i < deck.cards.length; i++) {
 
@@ -41,7 +34,46 @@ function Dealer() {
 		};
 	};
 
-	self.hit = function() {};
+	/**
+	 * Hit function to request a new card
+	 * Command pattern
+	 * @return  {function} new card for dealer array  
+	 */
+	self.hit = function(state, currentPlayer) {
+
+		//var deckLength = deck.cards.length;
+		var dealerCards = state.currentPlay.dealerCards;
+		var playerCards = state.currentPlay.playerCards;
+
+		var deck = state.deck;
+
+		if (currentPlayer == 'player') {
+
+
+			//Next Card, push New Card to Player Hand
+			if (playerCards.length <= 4) {
+
+				var card = deck.cards[0];
+				deck.cards.splice(0, 1);
+				playerCards.push(card);
+
+				return true;
+
+			} else {
+				return false;
+			}
+		} else {
+			var card = deck.cards[0];
+			deck.cards.splice(0, 1)
+
+			//Next Card, push New Card to Dealer Hand
+			if (dealerCards.length <= 4) {
+				dealerCards.push(card);
+			};
+		}
+
+		
+	};
 
 	self.stand = function() {};
 
@@ -51,14 +83,8 @@ function Dealer() {
 
 	self.resolve = function() {};
 
-}
+} 
 
-/**
- * Deck Function, create deck
- *
- * @class      Deck (Deck)
- * @param      {Object}  state   The state of the deck
- */
 function Deck (state){
 
 	this.cards = [];
@@ -77,9 +103,7 @@ function Deck (state){
  	};
 }
 
-/**
- * Do the deck random
- */
+
 Deck.prototype = {
 	contructor : Deck,
 
@@ -103,14 +127,6 @@ Deck.prototype = {
 	
 };
 
-/**
- * Valid Cards
- *
- * @class      Card (Card)
- * @param      {string}  value   The value of the card
- * @param      {string}  name    The name of the card
- * @param      {string}  suit    The suit of the card
- */
 function Card (value, name, suit) {
 	this.value = value;
 	this.suit = suit;
@@ -138,6 +154,8 @@ function Play() {
 	self.playerCards = [];
 
 	self.revealed = false;
-	self.userPlay;
-	self.dealerPlay;
+	self.aced = false; 
+	self.userTotal = 0;
+	self.acedTotal = 0;
+	self.dealerTotal = 0;
 }

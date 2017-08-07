@@ -27,8 +27,9 @@ var Game = function () {
 			    	deck: new Deck(),
 				    balance: config.balance,
 				    currentPlay: null,
-				    currentBet: 0
-			 
+				    currentBet: 0,
+			 		totalUser: 0
+
 			    };
 			}
 
@@ -56,23 +57,20 @@ var Game = function () {
 			end: []
 		};
 
-		/**
-		 * Create and execute Deck Function
-		 *
-		 * @param      {Object}  state   The state of the deck
-		 */
 		this.deck = function(state) {
 			this.state.deck.deckRandom();
 		}
 
-		/**
-		 * Execute and publish Dealer Function
-		 *
-		 * @param      {Object}  state   The state of the deal
-		 */
 		this.deal = function(state) {
 			this.state.dealer.execute('deal', this.state);
+			this.updateCounter();
 			this.publish('start', this.state);
+		}
+
+		this.hit = function(state) {
+			var valid = this.state.dealer.execute('hit', this.state, 'player');
+			this.updateCounter();
+			if(valid) this.publish('userPlay', this.state);
 		}
 
 		/**
@@ -113,23 +111,21 @@ var Game = function () {
 		 * @param      {number}  amt     The amount the user bet
 		 */
 		this.updateBet = function(amt) {
-			this.state.currentBet += amt;
-			this.state.balance -= amt;
-			this.publish('money', this.state);
+			if(amt < this.state.balance) {
+				this.state.currentBet += amt;
+				this.state.balance -= amt;
+				this.publish('money', this.state);
+				return true;				
+			} else {
+				return false;
+			}
+
 		}
 
-		/**
-		 * Update counter value of the cards - In progress
-		 *
-		 * @param      {Object}  state   The state of the counters and currentPlay
-		 */
 		this.updateCounter = function (state) {
-			var dealerCards = this.state.currentPlay.dealerCards;
-			var playerCards = this.state.currentPlay.playerCards;
-			var total = 0;
-
-			for (var i = 0; i < dealerCards.length; i++) {
-				dealerCards[i].value += total
+			this.state.currentPlay.userTotal = 0;
+			for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
+				this.state.currentPlay.userTotal += this.state.currentPlay.playerCards[i].value;
 			}
 		}
  	}
@@ -156,16 +152,24 @@ var Game = function () {
 		this.dealerCountDisplay;
 
 		this.messages = {
-			start: 'Place a bet to start playing'
-		}
+			start: 'Place a bet to start playing',
+			maxBet: 'You can\'t bet VALUE because you don\'t have enough money'
+		};
+
+		this.currentMsg = 'start';
 
 		/**
 		 * Renders current bet value in the DOM 
 		 * @param      {Object}  state   Current state of the model data
 		 */
 		this.renderBet = function(state) {
+			if(state.currentBet > 0) {
+				dealBtn.classList.remove('hidden');
+			} else {
+				dealBtn.classList.add('hidden');
+			}
 			betDisplay.innerHTML = state.currentBet;
-		}
+		};
 
 		/**
 		 * Renders current balance value in the DOM 
@@ -173,69 +177,93 @@ var Game = function () {
 		 */
 		this.renderBalance = function(state) {
 			balanceDisplay.innerHTML = state.balance;
-		}
+		};
 
 		/**
 		 * Renders a message in the DOM
 		 * @param      {string}  topic   The topic of the message to be displayed
 		 */
-		this.renderMsg = function(topic) {
-			msgDisplay.innerText = this.messages[topic];
-		}
+		this.renderMsg = function(topic, data) {
+			var msg = this.messages[topic].replace('VALUE', data);
+			msgDisplay.innerText = msg;
+		};
 
-		this.renderPlay = function() {}
+		var self = this;
 
-		this.renderCounters = function(state) {
-
-		}
-
-		/**
-		 * Render Cards Functions
-		 *
-		 * @param      {Object}  state   The state hands of the playerCards and dealerCards
-		 */
-		this.renderCard = function(state) {
-			
+		this.renderPlay = function(state) {
 
 			var dealerCards = state.currentPlay.dealerCards;
 			var playerCards = state.currentPlay.playerCards;
 
 			playDisplay.classList.remove("hidden");
 
-			/*
-			 *
-			 *Asign value and kind of the card according the hand
-			 *@param 	value - Value of tha card (Suit/Name)
-			 *@param 	kindCard - Kind of the display card (Front/Back)
-			 *
-			*/
-
-			function kindCards(value, kindCard) {
-				kindCard.classList.add(value.suit);
-				kindCard.classList.add('card' + value.name);
-			}
-
 			//Deal (Card Front/Card Back) to the dealer according the suit and the name
 			for (var i = 0; i < dealerCards.length; i++) {
 				if (i === 0) {
-					//dealerCardBack.classList.add('cardHidden');
-					kindCards(dealerCards[i],dealerCardBack);
+					dealerCardsDisplay.appendChild(self.composeCard(dealerCards[i]));
 				}else if (i === 1){
-					kindCards(dealerCards[i],dealerCardFront);
-				};
-			};
+					var card = self.composeCard(dealerCards[i]);
+					card.classList.add('cardHidden');
+					dealerCardsDisplay.appendChild(card);
+				 } 
+			}
 
 			//Deal (Card Front/Card Back) to the player according the suit and the name
 			for (var i = 0; i < playerCards.length; i++) {
-				if (i === 0) {
-					kindCards(playerCards[i], userCardBack);
-				}else if (i === 1){
-					kindCards(playerCards[i], userCardFront);
-				}
-			};
+				console.log(playerCards[i].name)
+				if (playerCards[i].name == 'A') {console.log('aced')}
+
+				userCardsDisplay.appendChild(self.composeCard(playerCards[i]));
+			}
 
 			dealBtn.classList.add('hidden');
+			hitBtn.classList.remove('hidden');
+			standBtn.classList.remove('hidden');
+
 		};
+
+		this.renderCard = function(state, container){
+
+			var dealerCards = state.currentPlay.dealerCards;
+			var playerCards = state.currentPlay.playerCards;
+
+
+			userCardsDisplay.appendChild(self.composeCard(playerCards[playerCards.length - 1]))
+		};
+
+		this.renderCounters = function(state) {
+			userCountDisplay.innerHTML = state.currentPlay.userTotal;
+
+			if (state.currentPlay.aced) {
+				userCountDisplay.innerHTML = state.currentPlay.acedTotal + ' / ' + state.currentPlay.userTotal;
+			}
+
+			if (state.currentPlay.revealed) {
+				dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
+			} else {
+				dealerCountDisplay.innerHTML = '?';
+			}
+		};
+
+		/*
+		 *
+		 *Asign value and kind of the card according the hand
+		 *@param 	value - Value of tha card (Suit/Name)
+		 *@param 	kindCard - Kind of the display card (Front/Back)
+		 *
+		*/
+		self.composeCard = function(card) { //solo una carta
+			
+			var element = document.createElement('span');
+			element.classList.add('card');
+			element.classList.add(card.suit);
+			element.classList.add('card' + card.name);
+
+			return element;
+			
+		};
+
+
 
 	}
 
@@ -248,6 +276,7 @@ var Game = function () {
 	    	this.addEvents();
 	    	this.addSubscriptions();
 	    	view.renderMsg('start');
+	    	view.currentMsg = 'start';
 	    	model.deck();
 	    }
 
@@ -257,21 +286,33 @@ var Game = function () {
 	    this.addSubscriptions = function() {
 	    	model.subscribe('money', view.renderBet);
 	    	model.subscribe('money', view.renderBalance);
-	    	model.subscribe('start', view.renderCard);
+	    	model.subscribe('start', view.renderPlay);
+	    	model.subscribe('userPlay', view.renderCounters);
 	    	model.subscribe('start', view.renderCounters);
+	    	model.subscribe('userPlay', view.renderCard);
 	    }
 
 	    /**
 	     * Adds the event handlers to the view buttons
 	     */
+	     var self = this;
 
 	    this.addEvents = function() {
-	    	chip1.addEventListener('click', function(){ model.updateBet(1) });
-	    	chip5.addEventListener('click', function(){ model.updateBet(5) });
-	    	chip25.addEventListener('click', function(){ model.updateBet(25) });
-	    	chip100.addEventListener('click', function(){ model.updateBet(100) });
+	    	chip1.addEventListener('click', function(){ self.validBet(1) });
+	    	chip5.addEventListener('click', function(){ self.validBet(5) });
+	    	chip25.addEventListener('click', function(){ self.validBet(25) });
+	    	chip100.addEventListener('click', function(){ self.validBet(100) });
 	    	dealBtn.addEventListener('click', function(){ model.deal()});
+	    	hitBtn.addEventListener('click', function() { model.hit()});
 	    }
+
+		self.validBet = function(amt) {
+			var valid = model.updateBet(amt);
+			if(!valid) {
+				view.renderMsg('maxBet', '$' + amt);
+				setTimeout(function(){view.renderMsg(view.currentMsg)}, 3000)
+			}
+		}
 
 	}
 
