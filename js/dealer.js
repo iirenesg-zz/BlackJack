@@ -14,54 +14,6 @@ function Dealer() {
 		var playerCards = state.currentPlay.playerCards;
 
 		var deck = state.deck;
-<<<<<<< HEAD
-
-		console.log(dealerCards, playerCards, deck)
-
-		for (var i = 0; i < deck.cards.length; i++) {
-
-			//Push Cards to Dealer Hand and Delete from Deck
-			if (dealerCards.length < 2) {
-				var card = deck.cards[i];
-				deck.cards.splice(i, 1)
-				dealerCards.push(card);
-			};
-
-			//Push Cards to Player Hand and Delete from Deck
-			if (playerCards.length < 2) {
-				var card = deck.cards[i];
-				deck.cards.splice(i, 1)
-				playerCards.push(card);
-			};
-
-		};
-	};
-
-	/**
-	 * Hit function to request a new card
-	 * Command pattern
-	 * @return  {function} new card for dealer array  
-	 */
-	self.hit = function(state, currentPlayer) {
-
-		//var deckLength = deck.cards.length;
-		var dealerCards = state.currentPlay.dealerCards;
-		var playerCards = state.currentPlay.playerCards;
-
-		var deck = state.deck;
-
-		if (currentPlayer == 'player') {
-
-
-			//Next Card, push New Card to Player Hand
-			if (playerCards.length <= 4) {
-
-				var card = deck.cards[0];
-				deck.cards.splice(0, 1);
-				playerCards.push(card);
-
-				console.log('pc', playerCards);
-=======
 
 		for (var i = 0; i < deck.cards.length; i++) {
 
@@ -106,7 +58,6 @@ function Dealer() {
 				deck.cards.splice(0, 1);
 				playerCards.push(card);
 
->>>>>>> 62fac146fe27561a9c1cfaf7946417d457dd33ca
 				return true;
 
 			} else {
@@ -143,11 +94,7 @@ function Deck (state){
 	//Card values
 	var suits = ["spade", "diamond", "heart", "club"];
 	var names = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-<<<<<<< HEAD
-	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
-=======
 	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1];
->>>>>>> 62fac146fe27561a9c1cfaf7946417d457dd33ca
 
 	//Create All Cards
 	for (var s = 0; s < suits.length; s++) {
@@ -181,12 +128,6 @@ Deck.prototype = {
 	
 };
 
-<<<<<<< HEAD
-//var deck = new Deck();
-//deck.deckRandom();
-
-=======
->>>>>>> 62fac146fe27561a9c1cfaf7946417d457dd33ca
 function Card (value, name, suit) {
 	this.value = value;
 	this.suit = suit;
