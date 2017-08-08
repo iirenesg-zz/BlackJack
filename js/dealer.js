@@ -29,7 +29,6 @@ function Dealer() {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
 				playerCards.push(card);
-				if (playerCards[i].name == 'A') {state.currentPlay.aced = true;}
 			};
 
 		};
@@ -72,17 +71,50 @@ function Dealer() {
 				dealerCards.push(card);
 			};
 		}
-
 		
 	};
 
-	self.stand = function() {};
+	self.stand = function(state) {
+
+		state.currentPlay.revealed = true; 
+		
+		if(state.currentPlay.dealerTotal < 17) {
+			self.hit(state, 'dealer');
+			var dealerCards = state.currentPlay.dealerCards;
+			state.currentPlay.dealerTotal = state.currentPlay.dealerTotal + dealerCards[dealerCards.length -1].value;
+			self.stand(state);
+		} else {
+			self.resolve(state);
+		}
+		
+	};
 
 	self.divide = function() {};
 
 	self.double = function() {};
 
-	self.resolve = function() {};
+	self.resolve = function(state) {
+		if ( state.currentPlay.userTotal  >  21) {
+			console.log('lose');
+			state.currentBet = 0;
+		} else if (state.currentPlay.dealerTotal > 21 || state.currentPlay.userTotal > state.currentPlay.dealerTotal ) {
+		
+			 state.currentBet += 2 * state.currentBet;
+			 console.log('win');
+		
+		} else if (state.currentPlay.dealerTotal > state.currentPlay.userTotal) {
+			console.log('win dealer > user');
+			state.currentBet = 0;
+
+		} else if (state.currentPlay.dealerTotal == state.currentPlay.userTotal) {
+		
+			state.currentBet  = 0;
+			console.log('win dealer draw');
+			
+		} else if (state.currentPlay.userTotal > 17 && state.currentPlay.userCards.length -1){
+			console('win player');
+		}
+	};
 
 } 
 
@@ -94,7 +126,7 @@ function Deck (state){
 	//Card values
 	var suits = ["spade", "diamond", "heart", "club"];
 	var names = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1];
+	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
 
 	//Create All Cards
 	for (var s = 0; s < suits.length; s++) {
@@ -154,6 +186,7 @@ function Play() {
 	self.dealerCards = [];
 	self.playerCards = [];
 
+	self.endStatus = false;
 	self.revealed = false;
 	self.aced = false; 
 	self.userTotal = 0;

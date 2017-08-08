@@ -59,6 +59,10 @@ function GameView(config) {
 		var self = this;
 
 		this.renderPlay = function(state) {
+			
+			dealerCardsDisplay.innerHTML = ' ';
+			userCardsDisplay.innerHTML = ' ';
+
 
 			var dealerCards = state.currentPlay.dealerCards;
 			var playerCards = state.currentPlay.playerCards;
@@ -110,6 +114,23 @@ function GameView(config) {
 				dealerCountDisplay.innerHTML = '?';
 			}
 		};
+
+		this.renderDealerCard = function(state) {
+
+			hitBtn.classList.add('hidden');
+			standBtn.classList.add('hidden');
+			var cardHidden = document.getElementsByClassName("cardHidden")[0];
+			cardHidden.classList.remove('cardHidden');
+
+			for(var i = 2; i<state.currentPlay.dealerCards.length; i++) {
+				var card = state.currentPlay.dealerCards[i];
+				dealerCardsDisplay.appendChild(self.composeCard(card));
+			}
+
+		}
+
+		this.renderEndPlay = function(state) {
+		}
 
 		/*
 		 *

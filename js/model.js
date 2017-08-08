@@ -63,6 +63,14 @@ function GameModel(config) {
 		if(valid) this.publish('userPlay', this.state);
 	}
 
+	this.stand = function(state){
+		this.state.dealer.execute('stand', this.state);
+		this.updateCounter();
+		this.publish('dealerPlay', this.state);
+		this.publish('end', this.state);
+		this.publish('money', this.state);
+	}
+
 	/**
 	 * Subscribes a function to a specific topic notification
 	 * @param      {string}    topic   The topic to subscribe to

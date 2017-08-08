@@ -16,11 +16,14 @@ function GameController(model, view) {
 	 */
     this.addSubscriptions = function() {
     	model.subscribe('money', view.renderBet);
-    	model.subscribe('money', view.renderBalance);
-    	model.subscribe('start', view.renderPlay);
-    	model.subscribe('userPlay', view.renderCounters);
-    	model.subscribe('start', view.renderCounters);
-    	model.subscribe('userPlay', view.renderCard);
+        model.subscribe('money', view.renderBalance);
+        model.subscribe('start', view.renderPlay);
+        model.subscribe('userPlay', view.renderCounters);
+        model.subscribe('dealerPlay', view.renderCounters);
+        model.subscribe('start', view.renderCounters);
+        model.subscribe('userPlay', view.renderCard);
+        model.subscribe('dealerPlay', view.renderDealerCard);
+        model.subscribe('end', view.renderEndPlay);
     }
 
     /**
@@ -35,6 +38,7 @@ function GameController(model, view) {
     	chip100.addEventListener('click', function(){ self.validBet(100) });
     	dealBtn.addEventListener('click', function(){ model.deal()});
     	hitBtn.addEventListener('click', function() { model.hit()});
+        standBtn.addEventListener('click', function(){ model.stand()});
     }
 
 	self.validBet = function(amt) {
