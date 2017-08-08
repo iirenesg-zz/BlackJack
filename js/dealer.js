@@ -15,8 +15,6 @@ function Dealer() {
 
 		var deck = state.deck;
 
-		console.log(dealerCards, playerCards, deck)
-
 		for (var i = 0; i < deck.cards.length; i++) {
 
 			//Push Cards to Dealer Hand and Delete from Deck
@@ -31,6 +29,7 @@ function Dealer() {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
 				playerCards.push(card);
+				if (playerCards[i].name == 'A') {state.currentPlay.aced = true;}
 			};
 
 		};
@@ -59,7 +58,6 @@ function Dealer() {
 				deck.cards.splice(0, 1);
 				playerCards.push(card);
 
-				console.log('pc', playerCards);
 				return true;
 
 			} else {
@@ -96,7 +94,7 @@ function Deck (state){
 	//Card values
 	var suits = ["spade", "diamond", "heart", "club"];
 	var names = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
+	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1];
 
 	//Create All Cards
 	for (var s = 0; s < suits.length; s++) {
@@ -130,9 +128,6 @@ Deck.prototype = {
 	
 };
 
-//var deck = new Deck();
-//deck.deckRandom();
-
 function Card (value, name, suit) {
 	this.value = value;
 	this.suit = suit;
@@ -160,6 +155,8 @@ function Play() {
 	self.playerCards = [];
 
 	self.revealed = false;
-	self.userPlay;
-	self.dealerPlay;
+	self.aced = false; 
+	self.userTotal = 0;
+	self.acedTotal = 0;
+	self.dealerTotal = 0;
 }

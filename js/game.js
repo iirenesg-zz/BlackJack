@@ -27,8 +27,9 @@ var Game = function () {
 			    	deck: new Deck(),
 				    balance: config.balance,
 				    currentPlay: null,
-				    currentBet: 0
-			 
+				    currentBet: 0,
+			 		totalUser: 0
+
 			    };
 			}
 
@@ -62,11 +63,13 @@ var Game = function () {
 
 		this.deal = function(state) {
 			this.state.dealer.execute('deal', this.state);
+			this.updateCounter();
 			this.publish('start', this.state);
 		}
 
 		this.hit = function(state) {
 			var valid = this.state.dealer.execute('hit', this.state, 'player');
+			this.updateCounter();
 			if(valid) this.publish('userPlay', this.state);
 		}
 
@@ -120,12 +123,27 @@ var Game = function () {
 		}
 
 		this.updateCounter = function (state) {
-			var dealerCards = this.state.currentPlay.dealerCards;
-			var playerCards = this.state.currentPlay.playerCards;
-			var total = 0;
+			this.state.currentPlay.userTotal = 0;
+			this.state.currentPlay.dealerTotal = 0;
+			this.state.currentPlay.acedTotal = 0;
 
-			for (var i = 0; i < dealerCards.length; i++) {
-				dealerCards[i].value += total
+			for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
+				this.state.currentPlay.userTotal += this.state.currentPlay.playerCards[i].value;
+			}
+			
+			for (var i = 0; i < this.state.currentPlay.dealerCards.length; i++) {
+				this.state.currentPlay.dealerTotal += this.state.currentPlay.dealerCards[i].value;
+			}
+
+			if(this.state.currentPlay.aced) {
+				for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
+
+					if (this.state.currentPlay.playerCards[i].name == 'A') {
+						this.state.currentPlay.acedTotal += 11;
+					} else {
+						this.state.currentPlay.acedTotal += this.state.currentPlay.playerCards[i].value;
+					}
+				}
 			}
 		}
  	}
@@ -214,6 +232,8 @@ var Game = function () {
 			}
 
 			dealBtn.classList.add('hidden');
+			hitBtn.classList.remove('hidden');
+			standBtn.classList.remove('hidden');
 
 		};
 
@@ -227,7 +247,17 @@ var Game = function () {
 		};
 
 		this.renderCounters = function(state) {
+			userCountDisplay.innerHTML = state.currentPlay.userTotal;
 
+			if (state.currentPlay.aced) {
+				userCountDisplay.innerHTML = state.currentPlay.acedTotal + ' | ' + state.currentPlay.userTotal;
+			}
+
+			if (state.currentPlay.revealed) {
+				dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
+			} else {
+				dealerCountDisplay.innerHTML = '?';
+			}
 		};
 
 		/*
@@ -247,6 +277,8 @@ var Game = function () {
 			return element;
 			
 		};
+
+
 
 	}
 
@@ -270,6 +302,7 @@ var Game = function () {
 	    	model.subscribe('money', view.renderBet);
 	    	model.subscribe('money', view.renderBalance);
 	    	model.subscribe('start', view.renderPlay);
+	    	model.subscribe('userPlay', view.renderCounters);
 	    	model.subscribe('start', view.renderCounters);
 	    	model.subscribe('userPlay', view.renderCard);
 	    }
