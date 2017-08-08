@@ -29,6 +29,7 @@ function Dealer() {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
 				playerCards.push(card);
+				if (playerCards[i].name == 'A') {state.currentPlay.aced = true;}
 			};
 
 		};
@@ -93,7 +94,7 @@ function Deck (state){
 	//Card values
 	var suits = ["spade", "diamond", "heart", "club"];
 	var names = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
+	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1];
 
 	//Create All Cards
 	for (var s = 0; s < suits.length; s++) {

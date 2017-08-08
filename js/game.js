@@ -136,7 +136,14 @@ var Game = function () {
 			}
 
 			if(this.state.currentPlay.aced) {
-				
+				for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
+
+					if (this.state.currentPlay.playerCards[i].name == 'A') {
+						this.state.currentPlay.acedTotal += 11;
+					} else {
+						this.state.currentPlay.acedTotal += this.state.currentPlay.playerCards[i].value;
+					}
+				}
 			}
 		}
  	}
@@ -221,7 +228,6 @@ var Game = function () {
 
 			//Deal (Card Front/Card Back) to the player according the suit and the name
 			for (var i = 0; i < playerCards.length; i++) {
-				if (playerCards[i].name == 'A') {state.currentPlay.aced = true;}
 				userCardsDisplay.appendChild(self.composeCard(playerCards[i]));
 			}
 
@@ -244,7 +250,7 @@ var Game = function () {
 			userCountDisplay.innerHTML = state.currentPlay.userTotal;
 
 			if (state.currentPlay.aced) {
-				userCountDisplay.innerHTML = state.currentPlay.acedTotal + ' / ' + state.currentPlay.userTotal;
+				userCountDisplay.innerHTML = state.currentPlay.acedTotal + ' | ' + state.currentPlay.userTotal;
 			}
 
 			if (state.currentPlay.revealed) {
