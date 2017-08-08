@@ -124,8 +124,19 @@ var Game = function () {
 
 		this.updateCounter = function (state) {
 			this.state.currentPlay.userTotal = 0;
+			this.state.currentPlay.dealerTotal = 0;
+			this.state.currentPlay.acedTotal = 0;
+
 			for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
 				this.state.currentPlay.userTotal += this.state.currentPlay.playerCards[i].value;
+			}
+			
+			for (var i = 0; i < this.state.currentPlay.dealerCards.length; i++) {
+				this.state.currentPlay.dealerTotal += this.state.currentPlay.dealerCards[i].value;
+			}
+
+			if(this.state.currentPlay.aced) {
+				
 			}
 		}
  	}
@@ -210,9 +221,7 @@ var Game = function () {
 
 			//Deal (Card Front/Card Back) to the player according the suit and the name
 			for (var i = 0; i < playerCards.length; i++) {
-				console.log(playerCards[i].name)
-				if (playerCards[i].name == 'A') {console.log('aced')}
-
+				if (playerCards[i].name == 'A') {state.currentPlay.aced = true;}
 				userCardsDisplay.appendChild(self.composeCard(playerCards[i]));
 			}
 
