@@ -22,6 +22,7 @@ function Dealer() {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
 				dealerCards.push(card);
+				if (dealerCards[i].name == 'A') {state.currentPlay.acedDealer = true;}
 			};
 
 			//Push Cards to Player Hand and Delete from Deck
@@ -29,6 +30,7 @@ function Dealer() {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
 				playerCards.push(card);
+				if (playerCards[i].name == 'A') {state.currentPlay.acedUser = true;}
 			};
 
 		};
@@ -95,24 +97,28 @@ function Dealer() {
 
 	self.resolve = function(state) {
 		if ( state.currentPlay.userTotal  >  21) {
-			console.log('lose');
+			
 			state.currentBet = 0;
+			state.currentPlay.endStatus = 'lose';
 		} else if (state.currentPlay.dealerTotal > 21 || state.currentPlay.userTotal > state.currentPlay.dealerTotal ) {
 		
 			 state.currentBet += 2 * state.currentBet;
-			 console.log('win');
+			 state.currentPlay.endStatus = 'win';
+			
 		
 		} else if (state.currentPlay.dealerTotal > state.currentPlay.userTotal) {
-			console.log('win dealer > user');
+			
+			state.currentPlay.endStatus = 'lose';
 			state.currentBet = 0;
 
 		} else if (state.currentPlay.dealerTotal == state.currentPlay.userTotal) {
 		
 			state.currentBet  = 0;
-			console.log('win dealer draw');
+			state.currentPlay.endStatus = 'draw';
+			
 			
 		} else if (state.currentPlay.userTotal > 17 && state.currentPlay.userCards.length -1){
-			console('win player');
+			
 		}
 	};
 
@@ -126,7 +132,7 @@ function Deck (state){
 	//Card values
 	var suits = ["spade", "diamond", "heart", "club"];
 	var names = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
+	var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1];
 
 	//Create All Cards
 	for (var s = 0; s < suits.length; s++) {
@@ -186,10 +192,12 @@ function Play() {
 	self.dealerCards = [];
 	self.playerCards = [];
 
-	self.endStatus = false;
 	self.revealed = false;
-	self.aced = false; 
+	self.acedUser = false; 
+	self.acedDealer = false; 
 	self.userTotal = 0;
-	self.acedTotal = 0;
+	self.acedUserTotal = 0;
 	self.dealerTotal = 0;
+	self.acedDealerTotal = 0;
+	self.endStatus = false;
 }

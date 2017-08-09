@@ -21,7 +21,10 @@ function GameView(config) {
 
 		this.messages = {
 			start: 'Place a bet to start playing',
-			maxBet: 'You can\'t bet VALUE because you don\'t have enough money'
+			maxBet: 'You can\'t bet VALUE because you don\'t have enough money',
+			lose: 'You lose the game',
+			win: 'You Win',
+			draw : 'You draw with the dealer'
 		};
 
 		this.currentMsg = 'start';
@@ -103,9 +106,14 @@ function GameView(config) {
 
 		this.renderCounters = function(state) {
 			userCountDisplay.innerHTML = state.currentPlay.userTotal;
+			console.log(state.currentPlay.acedUser)
+			if (state.currentPlay.acedUser) {
+				userCountDisplay.innerHTML = state.currentPlay.acedUserTotal + ' | ' + state.currentPlay.userTotal;
+			}
 
-			if (state.currentPlay.aced) {
-				userCountDisplay.innerHTML = state.currentPlay.acedTotal + ' | ' + state.currentPlay.userTotal;
+			if (state.currentPlay.acedDealer) {
+				console.log(state.currentPlay.acedDealer)
+				dealerCountDisplay.innerHTML = state.currentPlay.acedDealerTotal + ' | ' + state.currentPlay.dealerTotal;
 			}
 
 			if (state.currentPlay.revealed) {
@@ -130,6 +138,7 @@ function GameView(config) {
 		}
 
 		this.renderEndPlay = function(state) {
+			self.renderMsg(state.currentPlay.endStatus);
 		}
 
 		/*
