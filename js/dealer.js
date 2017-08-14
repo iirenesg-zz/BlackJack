@@ -96,29 +96,58 @@ function Dealer() {
 	self.double = function() {};
 
 	self.resolve = function(state) {
-		if ( state.currentPlay.userTotal  >  21) {
-			
-			state.currentBet = 0;
-			state.currentPlay.endStatus = 'lose';
-		} else if (state.currentPlay.dealerTotal > 21 || state.currentPlay.userTotal > state.currentPlay.dealerTotal ) {
-		
-			 state.currentBet += 2 * state.currentBet;
-			 state.currentPlay.endStatus = 'win';
-			
-		
-		} else if (state.currentPlay.dealerTotal > state.currentPlay.userTotal) {
-			
-			state.currentPlay.endStatus = 'lose';
-			state.currentBet = 0;
+		if (state.currentPlay.acedUser) {
+			if ( state.currentPlay.userTotal && state.currentPlay.acedUserTotal  >  21) {
 
-		} else if (state.currentPlay.dealerTotal == state.currentPlay.userTotal) {
-		
-			state.currentBet  = 0;
-			state.currentPlay.endStatus = 'draw';
+				state.currentBet = 0;
+				state.currentPlay.endStatus = 'lose';
+	
+			} else if (state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal > 21 || state.currentPlay.userTotal || state.currentPlay.acedUserTotal > state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal) {
+
+				state.currentBet += 2 * state.currentBet;
+				state.currentPlay.endStatus = 'win';
+				
 			
+			} else if (state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal > state.currentPlay.userTotal || state.currentPlay.acedUserTotal) {
+
+				state.currentPlay.endStatus = 'lose';
+				state.currentBet = 0;
+	
+			} else if (state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal == state.currentPlay.userTotal || state.currentPlay.acedUserTotal) {
+
+				state.currentBet  = 0;
+				state.currentPlay.endStatus = 'draw';
+				
+				
+			} else if (state.currentPlay.userTotal > 17 && state.currentPlay.userCards.length -1){
+				
+			}
+		}else{
+			if ( state.currentPlay.userTotal  >  21) {
+				
+				state.currentBet = 0;
+				state.currentPlay.endStatus = 'lose';
+	
+			} else if (state.currentPlay.dealerTotal > 21 || state.currentPlay.userTotal > state.currentPlay.dealerTotal ) {
 			
-		} else if (state.currentPlay.userTotal > 17 && state.currentPlay.userCards.length -1){
+				state.currentBet += 2 * state.currentBet;
+				state.currentPlay.endStatus = 'win';
+				
 			
+			} else if (state.currentPlay.dealerTotal > state.currentPlay.userTotal) {
+				
+				state.currentPlay.endStatus = 'lose';
+				state.currentBet = 0;
+	
+			} else if (state.currentPlay.dealerTotal == state.currentPlay.userTotal) {
+			
+				state.currentBet  = 0;
+				state.currentPlay.endStatus = 'draw';
+				
+				
+			} else if (state.currentPlay.userTotal > 17 && state.currentPlay.userCards.length -1){
+				
+			}
 		}
 	};
 

@@ -18,7 +18,6 @@ function GameModel(config) {
 			    balance: config.balance,
 			    currentPlay: null,
 			    currentBet: 0,
-		 		totalUser: 0
 
 		    };
 		}
@@ -123,7 +122,8 @@ function GameModel(config) {
 	this.updateCounter = function (state) {
 		this.state.currentPlay.userTotal = 0;
 		this.state.currentPlay.dealerTotal = 0;
-		this.state.currentPlay.acedTotal = 0;
+		this.state.currentPlay.acedUserTotal = 0;
+		this.state.currentPlay.acedDealerTotal = 0;
 
 		for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
 			this.state.currentPlay.userTotal += this.state.currentPlay.playerCards[i].value;
@@ -135,7 +135,6 @@ function GameModel(config) {
 
 		if(this.state.currentPlay.acedUser) {
 			for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
-
 				if (this.state.currentPlay.playerCards[i].name == 'A') {
 					this.state.currentPlay.acedUserTotal += 11;
 				} else {

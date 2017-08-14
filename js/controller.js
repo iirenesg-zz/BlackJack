@@ -28,8 +28,8 @@ function GameController(model, view) {
 
     /**
      * Adds the event handlers to the view buttons
-     */
-     var self = this;
+    */
+    var self = this;
 
     this.addEvents = function() {
     	chip1.addEventListener('click', function(){ self.validBet(1) });

@@ -16,8 +16,8 @@ function GameView(config) {
 		this.chip25 = config.chip25;
 		this.chip100 = config.chip100;
 
-		this.userCountDisplay;
-		this.dealerCountDisplay;
+		this.userCountDisplay = config.userCountDisplay;
+		this.dealerCountDisplay = config.dealerCountDisplay;
 
 		this.messages = {
 			start: 'Place a bet to start playing',
@@ -38,6 +38,7 @@ function GameView(config) {
 				dealBtn.classList.remove('hidden');
 			} else {
 				dealBtn.classList.add('hidden');
+				chipContainer.classList.remove('hidden');
 			}
 			betDisplay.innerHTML = state.currentBet;
 		};
@@ -105,21 +106,20 @@ function GameView(config) {
 		};
 
 		this.renderCounters = function(state) {
-			userCountDisplay.innerHTML = state.currentPlay.userTotal;
-			console.log(state.currentPlay.acedUser)
+			this.userCountDisplay.innerHTML = state.currentPlay.userTotal;
+			
 			if (state.currentPlay.acedUser) {
-				userCountDisplay.innerHTML = state.currentPlay.acedUserTotal + ' | ' + state.currentPlay.userTotal;
+				this.userCountDisplay.innerHTML = state.currentPlay.acedUserTotal + ' | ' + state.currentPlay.userTotal;
 			}
 
 			if (state.currentPlay.acedDealer) {
-				console.log(state.currentPlay.acedDealer)
-				dealerCountDisplay.innerHTML = state.currentPlay.acedDealerTotal + ' | ' + state.currentPlay.dealerTotal;
+				this.dealerCountDisplay.innerHTML = state.currentPlay.acedDealerTotal + ' | ' + state.currentPlay.dealerTotal;
 			}
 
 			if (state.currentPlay.revealed) {
-				dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
+				this.dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
 			} else {
-				dealerCountDisplay.innerHTML = '?';
+				this.dealerCountDisplay.innerHTML = '?';
 			}
 		};
 
@@ -139,6 +139,8 @@ function GameView(config) {
 
 		this.renderEndPlay = function(state) {
 			self.renderMsg(state.currentPlay.endStatus);
+			dealBtn.classList.add('hidden');
+			chipContainer.classList.remove('hidden');
 		}
 
 		/*
