@@ -8,7 +8,7 @@
 	</head>
 	<body>
 
-		<button id="dealBtn" class="bigBtn hidden">Deal</button>
+		<button id="dealBtn" class="hidden bigBtn">Deal</button>
 		<button id="continueBtn" class="bigBtn hidden">Continue</button>
 
 		<section class="msgContainer">
@@ -20,8 +20,8 @@
 				<div>
 					<p class="infoBox"><span id="userCountDisplay">21</span></p>
 					<div id="userCardsDisplay" class="cardsContainer">
-						<span id="userCardFront" class="card"></span>
-						<span id="userCardBack" class="card"></span>
+						<!-- <span id="userCardFront" class="card"></span>
+						<span id="userCardBack" class="card"></span> -->
 					</div>
 				</div>
 			</section>
@@ -30,8 +30,8 @@
 				<div>				
 					<p class="infoBox"><span id="dealerCountDisplay">21</span></p>
 					<div id="dealerCardsDisplay" class="cardsContainer">
-						<span id="dealerCardFront" class="card"></span>
-						<span id="dealerCardBack" class="card cardHidden"></span>
+						<!-- <span id="dealerCardFront" class="card"></span>
+						<span id="dealerCardBack" class="card cardHidden"></span> -->
 					</div>
 				</div>
 			</section>
@@ -41,7 +41,7 @@
 			<div class="betContainer">
 				<p class="infoBox">Bet: $<span id="betDisplay">0</span><span id="resetBetBtn" class="infoBox xBtn">x</span></p>
 			</div>
-			<div class="chipContainer">
+			<div class="chipContainer" id="chipContainer">
 				<span id="chip1" class="chip chip1"></span>
 				<span id="chip5" class="chip chip5"></span>
 				<span id="chip25" class="chip chip25"></span>
@@ -55,7 +55,10 @@
 				</div>
 			</div>
 		</section>
-
+		
+		<script src="js/model.js"></script>
+		<script src="js/view.js"></script>
+		<script src="js/controller.js"></script>
 		<script src="js/dealer.js"></script>
 		<script src="js/game.js"></script>
 		<script src="js/main.js"></script>

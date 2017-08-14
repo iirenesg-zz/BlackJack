@@ -5,7 +5,7 @@ var config = {
 		dealBtn: document.getElementById('dealBtn'),
 		playDisplay: document.getElementById('playDisplay'),
 		userCountDisplay: document.getElementById('userCountDisplay'),
-		delaerCountDisplay: document.getElementById('dealerCountDisplay'),
+		dealerCountDisplay: document.getElementById('dealerCountDisplay'),
 		userCardFront: document.getElementById('userCardFront'),
 		userCardBack: document.getElementById('userCardBack'),
 		dealerCardFront: document.getElementById('dealerCardFront'),
@@ -16,6 +16,7 @@ var config = {
 		chip5: document.getElementById('chip5'),
 		chip25: document.getElementById('chip25'),
 		chip100: document.getElementById('chip100'),
+		chipContainer: document.getElementById('chipContainer'),
 		resetBetBtn: document.getElementById('resetBetBtn'),
 		hitBtn: document.getElementById('hitBtn'),
 		standBtn: document.getElementById('standBtn'),
@@ -30,8 +31,8 @@ var config = {
 
 }
 
-var game = Game(config);
+var game = Game();
 
 (function init() {
-	game.init();
+	game.init(config);
 })();
