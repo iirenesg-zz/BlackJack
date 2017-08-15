@@ -22,6 +22,7 @@ function Dealer() {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
 				dealerCards.push(card);
+				if (dealerCards[i].name == 'A') {state.currentPlay.acedDealer = true;}
 			};
 
 			//Push Cards to Player Hand and Delete from Deck
@@ -29,7 +30,7 @@ function Dealer() {
 				var card = deck.cards[i];
 				deck.cards.splice(i, 1)
 				playerCards.push(card);
-				if (playerCards[i].name == 'A') {state.currentPlay.aced = true;}
+				if (playerCards[i].name == 'A') {state.currentPlay.acedUser = true;}
 			};
 
 		};
@@ -72,17 +73,83 @@ function Dealer() {
 				dealerCards.push(card);
 			};
 		}
-
 		
 	};
 
-	self.stand = function() {};
+	self.stand = function(state) {
+
+		state.currentPlay.revealed = true; 
+		
+		if(state.currentPlay.dealerTotal < 17) {
+			self.hit(state, 'dealer');
+			var dealerCards = state.currentPlay.dealerCards;
+			state.currentPlay.dealerTotal = state.currentPlay.dealerTotal + dealerCards[dealerCards.length -1].value;
+			self.stand(state);
+		} else {
+			self.resolve(state);
+		}
+		
+	};
 
 	self.divide = function() {};
 
 	self.double = function() {};
 
-	self.resolve = function() {};
+	self.resolve = function(state) {
+		if (state.currentPlay.acedUser) {
+			if ( state.currentPlay.userTotal && state.currentPlay.acedUserTotal  >  21) {
+
+				state.currentBet = 0;
+				state.currentPlay.endStatus = 'lose';
+	
+			} else if (state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal > 21 || state.currentPlay.userTotal || state.currentPlay.acedUserTotal > state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal) {
+
+				state.currentBet += 2 * state.currentBet;
+				state.currentPlay.endStatus = 'win';
+				
+			
+			} else if (state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal > state.currentPlay.userTotal || state.currentPlay.acedUserTotal) {
+
+				state.currentPlay.endStatus = 'lose';
+				state.currentBet = 0;
+	
+			} else if (state.currentPlay.dealerTotal || state.currentPlay.acedDealerTotal == state.currentPlay.userTotal || state.currentPlay.acedUserTotal) {
+
+				state.currentBet  = 0;
+				state.currentPlay.endStatus = 'draw';
+				
+				
+			} else if (state.currentPlay.userTotal > 17 && state.currentPlay.userCards.length -1){
+				
+			}
+		}else{
+			if ( state.currentPlay.userTotal  >  21) {
+				
+				state.currentBet = 0;
+				state.currentPlay.endStatus = 'lose';
+	
+			} else if (state.currentPlay.dealerTotal > 21 || state.currentPlay.userTotal > state.currentPlay.dealerTotal ) {
+			
+				state.currentBet += 2 * state.currentBet;
+				state.currentPlay.endStatus = 'win';
+				
+			
+			} else if (state.currentPlay.dealerTotal > state.currentPlay.userTotal) {
+				
+				state.currentPlay.endStatus = 'lose';
+				state.currentBet = 0;
+	
+			} else if (state.currentPlay.dealerTotal == state.currentPlay.userTotal) {
+			
+				state.currentBet  = 0;
+				state.currentPlay.endStatus = 'draw';
+				
+				
+			} else if (state.currentPlay.userTotal > 17 && state.currentPlay.userCards.length -1){
+				
+			}
+		}
+	};
 
 } 
 
@@ -155,8 +222,11 @@ function Play() {
 	self.playerCards = [];
 
 	self.revealed = false;
-	self.aced = false; 
+	self.acedUser = false; 
+	self.acedDealer = false; 
 	self.userTotal = 0;
-	self.acedTotal = 0;
+	self.acedUserTotal = 0;
 	self.dealerTotal = 0;
+	self.acedDealerTotal = 0;
+	self.endStatus = false;
 }

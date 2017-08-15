@@ -16,6 +16,7 @@ var config = {
 		chip5: document.getElementById('chip5'),
 		chip25: document.getElementById('chip25'),
 		chip100: document.getElementById('chip100'),
+		chipContainer: document.getElementById('chipContainer'),
 		resetBetBtn: document.getElementById('resetBetBtn'),
 		hitBtn: document.getElementById('hitBtn'),
 		standBtn: document.getElementById('standBtn'),

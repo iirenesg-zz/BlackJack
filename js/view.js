@@ -16,12 +16,15 @@ function GameView(config) {
 		this.chip25 = config.chip25;
 		this.chip100 = config.chip100;
 
-		this.userCountDisplay;
-		this.dealerCountDisplay;
+		this.userCountDisplay = config.userCountDisplay;
+		this.dealerCountDisplay = config.dealerCountDisplay;
 
 		this.messages = {
 			start: 'Place a bet to start playing',
-			maxBet: 'You can\'t bet VALUE because you don\'t have enough money'
+			maxBet: 'You can\'t bet VALUE because you don\'t have enough money',
+			lose: 'You lose the game',
+			win: 'You Win',
+			draw : 'You draw with the dealer'
 		};
 
 		this.currentMsg = 'start';
@@ -35,6 +38,7 @@ function GameView(config) {
 				dealBtn.classList.remove('hidden');
 			} else {
 				dealBtn.classList.add('hidden');
+				chipContainer.classList.remove('hidden');
 			}
 			betDisplay.innerHTML = state.currentBet;
 		};
@@ -59,6 +63,10 @@ function GameView(config) {
 		var self = this;
 
 		this.renderPlay = function(state) {
+			
+			dealerCardsDisplay.innerHTML = ' ';
+			userCardsDisplay.innerHTML = ' ';
+
 
 			var dealerCards = state.currentPlay.dealerCards;
 			var playerCards = state.currentPlay.playerCards;
@@ -80,7 +88,8 @@ function GameView(config) {
 			for (var i = 0; i < playerCards.length; i++) {
 				userCardsDisplay.appendChild(self.composeCard(playerCards[i]));
 			}
-
+			
+			chipContainer.classList.add('hidden');
 			dealBtn.classList.add('hidden');
 			hitBtn.classList.remove('hidden');
 			standBtn.classList.remove('hidden');
@@ -97,18 +106,42 @@ function GameView(config) {
 		};
 
 		this.renderCounters = function(state) {
-			userCountDisplay.innerHTML = state.currentPlay.userTotal;
+			this.userCountDisplay.innerHTML = state.currentPlay.userTotal;
+			
+			if (state.currentPlay.acedUser) {
+				this.userCountDisplay.innerHTML = state.currentPlay.acedUserTotal + ' | ' + state.currentPlay.userTotal;
+			}
 
-			if (state.currentPlay.aced) {
-				userCountDisplay.innerHTML = state.currentPlay.acedTotal + ' | ' + state.currentPlay.userTotal;
+			if (state.currentPlay.acedDealer) {
+				this.dealerCountDisplay.innerHTML = state.currentPlay.acedDealerTotal + ' | ' + state.currentPlay.dealerTotal;
 			}
 
 			if (state.currentPlay.revealed) {
-				dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
+				this.dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
 			} else {
-				dealerCountDisplay.innerHTML = '?';
+				this.dealerCountDisplay.innerHTML = '?';
 			}
 		};
+
+		this.renderDealerCard = function(state) {
+
+			hitBtn.classList.add('hidden');
+			standBtn.classList.add('hidden');
+			var cardHidden = document.getElementsByClassName("cardHidden")[0];
+			cardHidden.classList.remove('cardHidden');
+
+			for(var i = 2; i<state.currentPlay.dealerCards.length; i++) {
+				var card = state.currentPlay.dealerCards[i];
+				dealerCardsDisplay.appendChild(self.composeCard(card));
+			}
+
+		}
+
+		this.renderEndPlay = function(state) {
+			self.renderMsg(state.currentPlay.endStatus);
+			dealBtn.classList.add('hidden');
+			chipContainer.classList.remove('hidden');
+		}
 
 		/*
 		 *
