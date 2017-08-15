@@ -1,39 +1,42 @@
 function GameView(config) {
 
-		this.dealBtn;
-		this.hitBtn;
-		this.standBtn;
-		this.doubleBtn;
-		this.divideBtn;
+		var self = this;
 
-		this.balanceDisplay = config.balanceDisplay;
-		this.betDisplay = config.betDisplay;
-		this.playDisplay;
-		this.msgDisplay = msgDisplay;
+		self.dealBtn;
+		self.hitBtn;
+		self.standBtn;
+		self.doubleBtn;
+		self.divideBtn;
 
-		this.chip1 = config.chip1;
-		this.chip5 = config.chip5;
-		this.chip25 = config.chip25;
-		this.chip100 = config.chip100;
+		self.balanceDisplay = config.balanceDisplay;
+		self.betDisplay = config.betDisplay;
+		self.playDisplay;
+		self.msgDisplay = msgDisplay;
 
-		this.userCountDisplay = config.userCountDisplay;
-		this.dealerCountDisplay = config.dealerCountDisplay;
+		self.chip1 = config.chip1;
+		self.chip5 = config.chip5;
+		self.chip25 = config.chip25;
+		self.chip100 = config.chip100;
+		self.resetBetBtn = config.resetBetBtn;
 
-		this.messages = {
+		self.userCountDisplay = config.userCountDisplay;
+		self.dealerCountDisplay = config.dealerCountDisplay;
+
+		self.messages = {
 			start: 'Place a bet to start playing',
 			maxBet: 'You can\'t bet VALUE because you don\'t have enough money',
-			lose: 'You lose the game',
-			win: 'You Win',
-			draw : 'You draw with the dealer'
+			lose: 'You lose. Dealer takes your bet.',
+			win: 'You win! Your bet is doubled',
+			draw : 'It\'s a draw. Dealer takes your bet.'
 		};
 
-		this.currentMsg = 'start';
+		self.currentMsg = 'start';
 
 		/**
 		 * Renders current bet value in the DOM 
 		 * @param      {Object}  state   Current state of the model data
 		 */
-		this.renderBet = function(state) {
+		self.renderBet = function(state) {
 			if(state.currentBet > 0) {
 				dealBtn.classList.remove('hidden');
 			} else {
@@ -47,7 +50,7 @@ function GameView(config) {
 		 * Renders current balance value in the DOM 
 		 * @param      {Object}  state   Current state of the model data
 		 */
-		this.renderBalance = function(state) {
+		self.renderBalance = function(state) {
 			balanceDisplay.innerHTML = state.balance;
 		};
 
@@ -55,14 +58,12 @@ function GameView(config) {
 		 * Renders a message in the DOM
 		 * @param      {string}  topic   The topic of the message to be displayed
 		 */
-		this.renderMsg = function(topic, data) {
-			var msg = this.messages[topic].replace('VALUE', data);
+		self.renderMsg = function(topic, data) {
+			var msg = self.messages[topic].replace('VALUE', data);
 			msgDisplay.innerText = msg;
 		};
 
-		var self = this;
-
-		this.renderPlay = function(state) {
+		self.renderPlay = function(state) {
 			
 			dealerCardsDisplay.innerHTML = ' ';
 			userCardsDisplay.innerHTML = ' ';
@@ -96,34 +97,39 @@ function GameView(config) {
 
 		};
 
-		this.renderCard = function(state, container){
+		/**
+		 * Renders one card on the DOM
+		 *
+		 * @param      {object}  state      The model state
+		 * @param      {DOM el}  container  The container to append the card to
+		 */
+		self.renderCard = function(state, container){
 
 			var dealerCards = state.currentPlay.dealerCards;
 			var playerCards = state.currentPlay.playerCards;
 
-
 			userCardsDisplay.appendChild(self.composeCard(playerCards[playerCards.length - 1]))
 		};
 
-		this.renderCounters = function(state) {
-			this.userCountDisplay.innerHTML = state.currentPlay.userTotal;
+		self.renderCounters = function(state) {
+			self.userCountDisplay.innerHTML = state.currentPlay.userTotal;
 			
 			if (state.currentPlay.acedUser) {
-				this.userCountDisplay.innerHTML = state.currentPlay.acedUserTotal + ' | ' + state.currentPlay.userTotal;
+				self.userCountDisplay.innerHTML = state.currentPlay.acedUserTotal + ' | ' + state.currentPlay.userTotal;
 			}
 
 			if (state.currentPlay.acedDealer) {
-				this.dealerCountDisplay.innerHTML = state.currentPlay.acedDealerTotal + ' | ' + state.currentPlay.dealerTotal;
+				self.dealerCountDisplay.innerHTML = state.currentPlay.acedDealerTotal + ' | ' + state.currentPlay.dealerTotal;
 			}
 
 			if (state.currentPlay.revealed) {
-				this.dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
+				self.dealerCountDisplay.innerHTML = state.currentPlay.dealerTotal;
 			} else {
-				this.dealerCountDisplay.innerHTML = '?';
+				self.dealerCountDisplay.innerHTML = '?';
 			}
 		};
 
-		this.renderDealerCard = function(state) {
+		self.renderDealerCard = function(state) {
 
 			hitBtn.classList.add('hidden');
 			standBtn.classList.add('hidden');
@@ -137,7 +143,7 @@ function GameView(config) {
 
 		}
 
-		this.renderEndPlay = function(state) {
+		self.renderEndPlay = function(state) {
 			self.renderMsg(state.currentPlay.endStatus);
 			dealBtn.classList.add('hidden');
 			chipContainer.classList.remove('hidden');

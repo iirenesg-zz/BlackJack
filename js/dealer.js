@@ -98,10 +98,6 @@ function Dealer() {
 		
 	};
 
-	self.divide = function() {};
-
-	self.double = function() {};
-
 	self.resolve = function(state) {
 		if (state.currentPlay.acedUser) {
 			if ( state.currentPlay.userTotal && state.currentPlay.acedUserTotal  >  21) {
@@ -218,12 +214,13 @@ Card.prototype.setValue = function () {
 	}
 };
 
+/**
+ * Base class for play objects
+ *
+ * @class      Play (name)
+ */
 function Play() {
 	var self = this;
-
-	self.getCard = function(deck) {};
-
-	self.getPlayValue = function(array) {};
 
 	self.dealerCards = [];
 	self.playerCards = [];

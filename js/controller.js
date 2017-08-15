@@ -1,11 +1,13 @@
 function GameController(model, view) {
 
+    var self = this;
+
     /**
      * Initializes game controller
      */
-    this.init = function() {
-        this.addEvents();
-        this.addSubscriptions();
+    self.init = function() {
+        self.addEvents();
+        self.addSubscriptions();
         view.renderMsg('start');
         view.currentMsg = 'start';
         model.deck();
@@ -14,7 +16,7 @@ function GameController(model, view) {
     /**
      * Subscribes view functions to the model observer list 
      */
-    this.addSubscriptions = function() {
+    self.addSubscriptions = function() {
         model.subscribe('money', view.renderBet);
         model.subscribe('money', view.renderBalance);
         model.subscribe('start', view.renderPlay);
@@ -29,9 +31,8 @@ function GameController(model, view) {
     /**
      * Adds the event handlers to the view buttons
     */
-    var self = this;
 
-    this.addEvents = function() {
+    self.addEvents = function() {
         chip1.addEventListener('click', function(){ self.validBet(1) });
         chip5.addEventListener('click', function(){ self.validBet(5) });
         chip25.addEventListener('click', function(){ self.validBet(25) });
@@ -39,8 +40,15 @@ function GameController(model, view) {
         dealBtn.addEventListener('click', function(){ model.deal()});
         hitBtn.addEventListener('click', function() { model.hit()});
         standBtn.addEventListener('click', function(){ model.stand()});
+        view.resetBetBtn.addEventListener('click', model.resetBet);
     }
 
+    /**
+     * Checks the model response to the bet to 
+     * inform the user of whether it was valid or not
+     *
+     * @param      {number}  amt     The amount to bet
+     */
     self.validBet = function(amt) {
         var valid = model.updateBet(amt);
         if(!valid) {

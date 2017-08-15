@@ -1,5 +1,7 @@
 function GameModel(config) {
 
+	var self = this;
+
 	/**
 	 * Singleton pattern 
 	 * Returns a unique instance of the game data
@@ -36,9 +38,9 @@ function GameModel(config) {
 
 	})();
 
-	this.state = State.getInstance(config);
+	self.state = State.getInstance(config);
 
-	this.observers = {
+	self.observers = {
 		start: [],
 		money: [],
 		userPlay: [],
@@ -46,28 +48,28 @@ function GameModel(config) {
 		end: []
 	};
 
-	this.deck = function(state) {
-		this.state.deck.deckRandom();
+	self.deck = function(state) {
+		self.state.deck.deckRandom();
 	}
 
-	this.deal = function(state) {
-		this.state.dealer.execute('deal', this.state);
-		this.updateCounter();
-		this.publish('start', this.state);
+	self.deal = function(state) {
+		self.state.dealer.execute('deal', self.state);
+		self.updateCounter();
+		self.publish('start', self.state);
 	}
 
-	this.hit = function(state) {
-		var valid = this.state.dealer.execute('hit', this.state, 'player');
-		this.updateCounter();
-		if(valid) this.publish('userPlay', this.state);
+	self.hit = function(state) {
+		var valid = self.state.dealer.execute('hit', self.state, 'player');
+		self.updateCounter();
+		if(valid) self.publish('userPlay', self.state);
 	}
 
-	this.stand = function(state){
-		this.state.dealer.execute('stand', this.state);
-		this.updateCounter();
-		this.publish('dealerPlay', this.state);
-		this.publish('end', this.state);
-		this.publish('money', this.state);
+	self.stand = function(state){
+		self.state.dealer.execute('stand', self.state);
+		self.updateCounter();
+		self.publish('dealerPlay', self.state);
+		self.publish('end', self.state);
+		self.publish('money', self.state);
 	}
 
 	/**
@@ -75,8 +77,8 @@ function GameModel(config) {
 	 * @param      {string}    topic   The topic to subscribe to
 	 * @param      {Function}  fn      Function to subscribe
 	 */
-	this.subscribe = function(topic, fn) {
-		this.observers[topic].push(fn);
+	self.subscribe = function(topic, fn) {
+		self.observers[topic].push(fn);
 	}
 
 	/**
@@ -84,8 +86,8 @@ function GameModel(config) {
 	 * @param      {string}    topic   The topic to unsubscribe to
 	 * @param      {Function}  fn      Function to unsubscribe
 	 */
-	this.unsubscribe = function(topic, fn) {
-		this.observers[topic] =  this.observers[topic].filter(function(observer) {
+	self.unsubscribe = function(topic, fn) {
+		self.observers[topic] =  self.observers[topic].filter(function(observer) {
 			if(observer != fn) {
 				return observer;
 			}
@@ -97,8 +99,8 @@ function GameModel(config) {
 	 * @param      {string}  topic   The topic notification where changes happened
 	 * @param      {object}  data    The data to send as parameters to the subscribed functions
 	 */
-	this.publish = function(topic, data) {
-		this.observers[topic].forEach(function(observer){
+	self.publish = function(topic, data) {
+		self.observers[topic].forEach(function(observer){
 			observer(data);
 		});
 	}
@@ -107,49 +109,57 @@ function GameModel(config) {
 	 * Updates the value of the bet and balance variables of the game state
 	 * @param      {number}  amt     The amount the user bet
 	 */
-	this.updateBet = function(amt) {
-		if(amt < this.state.balance) {
-			this.state.currentBet += amt;
-			this.state.balance -= amt;
-			this.publish('money', this.state);
+	self.updateBet = function(amt) {
+		if(amt < self.state.balance) {
+			self.state.currentBet += amt;
+			self.state.balance -= amt;
+			self.publish('money', self.state);
 			return true;				
 		} else {
 			return false;
 		}
-
 	}
 
-	this.updateCounter = function (state) {
-		this.state.currentPlay.userTotal = 0;
-		this.state.currentPlay.dealerTotal = 0;
-		this.state.currentPlay.acedUserTotal = 0;
-		this.state.currentPlay.acedDealerTotal = 0;
+	/**
+	 * Returns current bet to balance
+	 */
+	self.resetBet = function() {
+		self.state.balance += self.state.currentBet;
+		self.state.currentBet = 0;
+		self.publish('money', self.state);		
+	}
 
-		for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
-			this.state.currentPlay.userTotal += this.state.currentPlay.playerCards[i].value;
+	self.updateCounter = function (state) {
+		self.state.currentPlay.userTotal = 0;
+		self.state.currentPlay.dealerTotal = 0;
+		self.state.currentPlay.acedUserTotal = 0;
+		self.state.currentPlay.acedDealerTotal = 0;
+
+		for (var i = 0; i < self.state.currentPlay.playerCards.length; i++) {
+			self.state.currentPlay.userTotal += self.state.currentPlay.playerCards[i].value;
 		}
 		
-		for (var i = 0; i < this.state.currentPlay.dealerCards.length; i++) {
-			this.state.currentPlay.dealerTotal += this.state.currentPlay.dealerCards[i].value;
+		for (var i = 0; i < self.state.currentPlay.dealerCards.length; i++) {
+			self.state.currentPlay.dealerTotal += self.state.currentPlay.dealerCards[i].value;
 		}
 
-		if(this.state.currentPlay.acedUser) {
-			for (var i = 0; i < this.state.currentPlay.playerCards.length; i++) {
-				if (this.state.currentPlay.playerCards[i].name == 'A') {
-					this.state.currentPlay.acedUserTotal += 11;
+		if(self.state.currentPlay.acedUser) {
+			for (var i = 0; i < self.state.currentPlay.playerCards.length; i++) {
+				if (self.state.currentPlay.playerCards[i].name == 'A') {
+					self.state.currentPlay.acedUserTotal += 11;
 				} else {
-					this.state.currentPlay.acedUserTotal += this.state.currentPlay.playerCards[i].value;
+					self.state.currentPlay.acedUserTotal += self.state.currentPlay.playerCards[i].value;
 				}
 			}
 		}
 
-		if(this.state.currentPlay.acedDealer) {
-			for (var i = 0; i < this.state.currentPlay.dealerCards.length; i++) {
+		if(self.state.currentPlay.acedDealer) {
+			for (var i = 0; i < self.state.currentPlay.dealerCards.length; i++) {
 
-				if (this.state.currentPlay.dealerCards[i].name == 'A') {
-					this.state.currentPlay.acedDealerTotal += 11;
+				if (self.state.currentPlay.dealerCards[i].name == 'A') {
+					self.state.currentPlay.acedDealerTotal += 11;
 				} else {
-					this.state.currentPlay.acedDealerTotal += this.state.currentPlay.dealerCards[i].value;
+					self.state.currentPlay.acedDealerTotal += self.state.currentPlay.dealerCards[i].value;
 				}
 			}
 		}
